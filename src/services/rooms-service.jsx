@@ -4,14 +4,14 @@ export default class RoomsService {
     getResource = async (url) => {
       const resp = await fetch(url);
       let body;
-      if (resp.ok) {
+      if (!resp.ok) {
         body = await resp.json();
       } else {
         body = [{
           url: 'https://q-cf.bstatic.com/images/hotel/max1024x768/243/243128320.jpg',
-          stars: 2,
+          stars: 5,
           mark: 8.8,
-          isVip: false,
+          isVip: true,
           persons: 2,
           cost: 60,
         },
@@ -37,7 +37,7 @@ export default class RoomsService {
     };
 
     getAllRooms = async () => {
-      let result = await this.getResource(`${API_BASE}`);
+      let result = await this.getResource(`${this.API_BASE}`);
 
       return result;
     }
