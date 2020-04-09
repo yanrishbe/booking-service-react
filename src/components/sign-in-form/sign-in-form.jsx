@@ -5,16 +5,17 @@ class SignInForm extends Component {
 
   onSignInFormSubmit = (event) => {
     event.preventDefault();
-
     const email = event.target.email.value;
     const password = event.target.password.value;
+    console.log(email);
+    console.log(password);
 
     fetch(SIGN_IN_SEND_FORM, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
-      body: JSON.stringify({email, password}),
+      body: JSON.stringify({email:email, password: password}),
     })
     .then((resp) => resp.json())
     .then((body) => {
@@ -37,21 +38,21 @@ class SignInForm extends Component {
           <div className="col-6">
             <form onSubmit={this.onSignInFormSubmit}>
               <div className="form-group">
-                <label for="signInEmail">Email address</label>
-                <input type="email" class="form-control" id="signInEmail" aria-describedby="emailHelp" placeholder="Enter email" />
+                <label htmlFor="signInEmail">Email address</label>
+                <input type="email" name="email"  className="form-control" id="signInEmail" aria-describedby="emailHelp" placeholder="Enter email" />
               </div>
               <div className="form-group">
-                <label for="sigInPassword">Password</label>
-                <input type="password" class="form-control" id="sigInPassword" placeholder="Password" />
+                <label htmlFor="sigInPassword">Password</label>
+                <input type="password" name="password" className="form-control" id="sigInPassword" placeholder="Password" />
               </div>
-              <button type="submit" class="btn btn-primary">SIGN IN</button>
-            </form>        
+              <button type="submit" className="btn btn-primary">SIGN IN</button>
+            </form>
           </div>
         </div>
       )
     }
     return null;
   }
-}  
+}
 
 export default SignInForm;
