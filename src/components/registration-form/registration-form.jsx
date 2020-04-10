@@ -69,7 +69,7 @@ export default class RegistrationForm extends Component {
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
         },
-      mode: "no-cors",
+        mode: "no-cors",
         body: JSON.stringify({email, password}),
       })
       .then((resp) => resp.json())
