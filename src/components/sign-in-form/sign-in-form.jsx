@@ -7,8 +7,7 @@ class SignInForm extends Component {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(email);
-    console.log(password);
+
 
     fetch(SIGN_IN_SEND_FORM, {
       method: 'POST',

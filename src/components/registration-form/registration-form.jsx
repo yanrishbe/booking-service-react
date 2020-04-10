@@ -76,6 +76,7 @@ export default class RegistrationForm extends Component {
         alert(body);
       })
       .catch(() => alert('err'));
+    this.props.afterRegistrationAction();  
   }
 
   render() {
@@ -119,10 +120,10 @@ export default class RegistrationForm extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="age">Enter your age</label>
-                <input 
+                <input
                   className="form-control"
-                  type="number" 
-                  id="age" 
+                  type="number"
+                  id="age"
                   placeholder="your age"
                   min = "18"
                   name="age"

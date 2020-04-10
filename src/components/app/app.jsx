@@ -13,7 +13,7 @@ export default class App extends Component {
     };
 
     onSignUpClick = () => {
-      
+
       this.setState( (state) => {
         return {
           showRegistration: !state.showRegistration,
@@ -31,12 +31,19 @@ export default class App extends Component {
       });
     }
 
+    afterRegistrationAction = () => {
+      this.setState({
+        showLogIn: true,
+        showRegistration: false,
+      })
+    }
+
     render() {
 
       return (
         <>
           <Header onSignUpClick = {this.onSignUpClick} onSignInClick ={this.onLoginClick}/>
-          <RegistrationForm isVisible = {this.state.showRegistration} />
+          <RegistrationForm isVisible = {this.state.showRegistration} afterRegistrationAction = {this.afterRegistrationAction}/>
           <SignInForm isVisible = {this.state.showLogIn}/>
           <Rooms />
         </>
