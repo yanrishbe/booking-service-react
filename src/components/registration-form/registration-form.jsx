@@ -1,7 +1,7 @@
 import './registration-form.css';
 import React, { Component } from 'react';
 
-const SEND_REGISTRATION_INFO_URL = 'CHEESER';
+const SEND_REGISTRATION_INFO_URL = 'http://localhost:9999/user';
 
 export default class RegistrationForm extends Component {
   constructor(props) {
@@ -67,9 +67,10 @@ export default class RegistrationForm extends Component {
     fetch(SEND_REGISTRATION_INFO_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json;charset=utf-8'
+          'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify({email, password, age}),
+      mode: "no-cors",
+        body: JSON.stringify({email, password}),
       })
       .then((resp) => resp.json())
       .then((body) => {
