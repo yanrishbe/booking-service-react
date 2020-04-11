@@ -12,8 +12,7 @@ export default class Header extends Component {
   render() {
     let adminButton = null;
 
-    localStorage.setItem('isAuthorized', true);
-    localStorage.setItem('role', 'admin');
+ 
 
     if(localStorage.getItem('isAuthorized') === 'true' && localStorage.getItem('role') === 'admin'){
       adminButton = (

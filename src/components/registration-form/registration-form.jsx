@@ -14,9 +14,7 @@ export default class RegistrationForm extends Component {
 
   onRepeatPasswordChange = (event) => {
     const {value}  = event.target;
-    const { password } = this.state;
 
-    console.log(value, password);
     this.setState({
         repeatPassword: value
       });
@@ -58,11 +56,35 @@ export default class RegistrationForm extends Component {
     });
   }
 
+  onPhoneChange = (event) => {
+    console.log('a');
+    var phoneRegexp = /^\+375[0-9]{9}$/;
+    const phoneNumber = event.target.value;
+    let res = Boolean( phoneNumber.match(phoneRegexp));
+    if (!res ){
+      let el = document.getElementById('labelForPhone');
+      el.style.color = 'red';
+      el.innerHTML = 'Incorrect Phone Number'
+    } else {
+      let el = document.getElementById('labelForPhone');
+      el.style.color = 'green';
+      el.innerHTML = 'Correct Phone Number'
+    }
+    this.setState({
+      isPhoneCorrect: res,
+    })
+  }
+
   onRegistrationFormSubmit = (event) => {
     event.preventDefault();
+    const name = event.target.name.value;
+    const surname = event.target.surname.value;
+    const patronymic = event.target.patronymic.value;
+    const phone = event.target.phone.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const age = event.target.age.value;
+    
+
 
     fetch(SEND_REGISTRATION_INFO_URL, {
         method: 'POST',
@@ -70,7 +92,7 @@ export default class RegistrationForm extends Component {
           'Content-Type': 'application/json;charset=utf-8',
         },
         mode: "no-cors",
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({name, surname, patronymic,phone,email, password}),
       })
       .then((resp) => resp.json())
       .then((body) => {
@@ -88,6 +110,49 @@ export default class RegistrationForm extends Component {
           <div className="col-6"></div>
           <div className="col-6">
             <form onSubmit = {this.onRegistrationFormSubmit}>
+
+              <div className="form-group">
+              <label htmlFor="name" id="labelForName">Nmae</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Name"
+                  id="name"
+                  name="name"
+                />  
+              </div>
+              <div className="form-group">
+              <label htmlFor="surname" id="labelForSurname">Surname</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Surname"
+                  id="surname"
+                  name="surname"
+                />  
+              </div>
+              <div className="form-group">
+              <label htmlFor="patronymic" id="labelForPatronymic">Patronymic</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Patronymic"
+                  id="patronymic"
+                  name="patronymic"
+                />  
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone" id="labelForPhone">Phone</label>
+                <input
+                  type="phone"
+                  className="form-control"
+                  aria-describedby="emailHelp"
+                  placeholder="Phone number"
+                  name="phone"
+                  id="phone"
+                  onChange = {this.onPhoneChange}
+                />
+              </div>
               <div className="form-group">
                 <label htmlFor="exampleInputEmail1">Email address</label>
                 <input
@@ -119,22 +184,11 @@ export default class RegistrationForm extends Component {
                   onChange = {this.onRepeatPasswordChange}
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="age">Enter your age</label>
-                <input
-                  className="form-control"
-                  type="number"
-                  id="age"
-                  placeholder="your age"
-                  min = "18"
-                  name="age"
-                  required
-                />
-              </div>
+
               <button type="submit" id= "signUpBtn" className="btn btn-primary" disabled>REGISTER</button>
             </form>
-          </div>
 
+          </div>
         </div>
       );
     }
