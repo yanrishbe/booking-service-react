@@ -93,12 +93,10 @@ export default class RegistrationForm extends Component {
         },
         mode: "no-cors",
         body: JSON.stringify({name, surname, patronymic,phone,email, password}),
-      })
-      .then((resp) => resp.json())
-      .then((body) => {
-        alert(body);
-      })
-      .catch(() => alert('err'));
+    })
+    .then((resp) => alert('Thank you for registration'))
+    .catch((err) => alert('Sorry something wrong'));
+
     this.props.afterRegistrationAction();  
   }
 
