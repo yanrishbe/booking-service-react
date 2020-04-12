@@ -28,37 +28,36 @@ export default class RegistrationForm extends Component {
       this.styleEnabled(label);
       this.enableBtn('signUpBtn');
     }
-  }
+  };
 
   disableBtn = (btnId) => {
     const submitBtn = document.getElementById(btnId);
     submitBtn.disabled = true;
-  }
+  };
 
   enableBtn = (btnId) => {
     const submitBtn = document.getElementById(btnId);
     submitBtn.disabled = false;
-  }
+  };
 
   styleDisabled = (el) => {
     el.style.color = "red";
     el.innerHTML = "Password mismatch"
-  }
+  };
 
   styleEnabled = (el) => {
     el.style.color = "green";
     el.innerHTML = "Congratulation!"
-  }
+  };
 
   onPasswordChange = (event) => {
     this.setState({
       password: event.target.value
     });
-  }
+  };
 
   onPhoneChange = (event) => {
-    console.log('a');
-    var phoneRegexp = /^\+375[0-9]{9}$/;
+    const phoneRegexp = /^\+375[0-9]{9}$/;
     const phoneNumber = event.target.value;
     let res = Boolean( phoneNumber.match(phoneRegexp));
     if (!res ){
@@ -73,7 +72,7 @@ export default class RegistrationForm extends Component {
     this.setState({
       isPhoneCorrect: res,
     })
-  }
+  };
 
   onRegistrationFormSubmit = (event) => {
     event.preventDefault();
@@ -98,7 +97,7 @@ export default class RegistrationForm extends Component {
     .catch((err) => alert('Sorry something wrong'));
 
     this.props.afterRegistrationAction();  
-  }
+  };
 
   render() {
     const { isVisible } = this.props;

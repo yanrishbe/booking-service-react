@@ -19,14 +19,18 @@ class SignInForm extends Component {
     .then((resp) => resp.json())
     .then((body) => {
       localStorage.setItem('role', body.userRole);
-      localStorage.setItem('isAuthorized', true);
+      localStorage.setItem('isAuthorized', 'true');
+      localStorage.setItem('bookings', body.bookings);
+      localStorage.setItem('currency', body.currency);
+      localStorage.setItem('amount', body.amount);
+      localStorage.setItem('token', body.token);
     })
     .catch((err) => {
       alert(err);
       localStorage.setItem('isAuthorized', false);
       localStorage.removeItem('role');
     })
-  }
+  };
 
   render() {
     const { isVisible } = this.props;

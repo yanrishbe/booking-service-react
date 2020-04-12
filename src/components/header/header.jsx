@@ -6,18 +6,17 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
     this.onSignUpClick = props.onSignUpClick;
-    this.onSignInClick = props.onSignInClick
+    this.onSignInClick = props.onSignInClick;
+    this.onAdminPanelClick = props.onAdminPanelClick;
   }
 
   render() {
     let adminButton = null;
 
- 
-
     if(localStorage.getItem('isAuthorized') === 'true' && localStorage.getItem('role') === 'admin'){
       adminButton = (
         <div className="col-1.5">
-          <button className= "btn btn-warning">ADMIN PANEL</button>
+          <button className= "btn btn-warning" onClick={this.onAdminPanelClick}>ADMIN PANEL</button>
         </div>
       );
     }
