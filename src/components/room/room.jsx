@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import './room.css';
 import DEFAULT_IMAGE from './noimage.jpeg';
 import STAR from './star.png';
+import {parseBoolean} from "../../utils/parsers";
 
 export default class Room extends Component {
   constructor(props) {
     super(props);
     const {
-      url, isVip, isFree, stars, cost, persons,
-    } = this.props;
+      id, url, isVip, isFree, stars, cost, persons,
+    } = this.props.room;
     this.state = {
+      id,
       url,
       isVip,
       isFree,
@@ -41,9 +43,19 @@ export default class Room extends Component {
 
   render() {
     const {
-      url, isVip, isFree, stars, cost, persons,
+      id, url, isVip, isFree, stars, cost, persons,
     } = this.state;
     const starsList = this.createStarsList(stars);
+    let bookBtn = null;
+    const role = localStorage.getItem('role');
+    const isAuthorized = parseBoolean( localStorage.getItem('isAuthorized'));
+    if(isFree && role==='user' && isAuthorized){
+      bookBtn = (
+          <button className="btn btn-lg btn-primary" onClick={() => this.props.onBookClick(id)}>
+            BOOK
+          </button>
+      );
+    }
 
     return (
       <div className="room">
@@ -63,6 +75,9 @@ export default class Room extends Component {
           <br />
           {cost}
           $/day
+        </div>
+        <div className="bookBtn">
+          {bookBtn}
         </div>
       </div>
     );

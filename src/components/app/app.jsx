@@ -7,12 +7,31 @@ import RegistrationForm from '../registration-form/registration-form';
 import SignInForm from '../sign-in-form/sign-in-form';
 import AdminPanel from "../admin-panel/admin-panel";
 
+const BOOK_ROOM_URL= 'BOOK_ROOM_URL';
 export default class App extends Component {
     state = {
       showRegistration: false,
       showLogIn: false,
       showRooms: true,
       showAdminPanel: false,
+    };
+
+    onBookClick = (roomId) => {
+        const token = localStorage.getItem('token');
+        fetch(BOOK_ROOM_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json;charset=utf-8',
+                'access_token' : token,
+            },
+            mode: "no-cors",
+            body: roomId,
+        })
+        .then((resp) => resp.json())
+        .then((body) => alert)
+        .catch((err) => {
+            alert('Error');
+        });
     };
 
     onSignUpClick = () => {
@@ -54,7 +73,7 @@ export default class App extends Component {
     };
 
     render() {
-      const rooms = this.state.showRooms ? <Rooms /> : null;
+      const rooms = this.state.showRooms ? <Rooms onBookClick = {this.onBookClick}/> : null;
       const adminPanel = this.state.showAdminPanel ? <AdminPanel/> : null;
       return (
         <React.Fragment>

@@ -13,4 +13,11 @@
     max-height: 20px;
     max-width: 20px;
 }
-
+.description{
+    width: 150px;
+}
+.bookBtn{
+    margin-left: 200px;
+    float: right;
+    margin-top: 75px;
+}

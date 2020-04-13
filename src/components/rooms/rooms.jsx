@@ -50,6 +50,6 @@ export default class Rooms extends Component {
         <Spinner />
       );
     }
-    return <RoomsList roomsList= {roomsList}/>;
+    return <RoomsList roomsList= {roomsList} onBookClick = {this.props.onBookClick}/>;
   }
 }
