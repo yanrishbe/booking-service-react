@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
 
-const SIGN_IN_SEND_FORM = 'cheeser';
 class SignInForm extends Component {
 
-  onSignInFormSubmit = (event) => {
+  constructor(props) {
+    super(props);
+  }
+
+  onSignInFormSubmit = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
+    const data = JSON.stringify({email, password});
+    try {
+      const response = await fetch('localhost:9999/users/login',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        mode: 'no-cors',
+        body: data
+      });
+      const body = response.json();
+      localStorage.clear();
+      localStorage.setItem("userToken", body.token);
+      localStorage.setItem("role", body.role);
+      localStorage.setItem("isAuthorised", "true");
+      localStorage.setItem("userId", body.userId);
+    } catch (e) {
+      alert('Sorry something wrong');
+    }
+
+  }
 
 
-    fetch(SIGN_IN_SEND_FORM, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify({email:email, password: password}),
-    })
-    .then((resp) => resp.json())
-    .then((body) => {
-      localStorage.setItem('role', body.userRole);
-      localStorage.setItem('isAuthorized', 'true');
-      localStorage.setItem('bookings', body.bookings);
-      localStorage.setItem('currency', body.currency);
-      localStorage.setItem('amount', body.amount);
-      localStorage.setItem('token', body.token);
-    })
-    .catch((err) => {
-      alert(err);
-      localStorage.setItem('isAuthorized', false);
-      localStorage.removeItem('role');
-    })
-  };
 
-  render() {
+  render(){
     const { isVisible } = this.props;
 
     if (isVisible) {
@@ -58,5 +60,4 @@ class SignInForm extends Component {
     return null;
   }
 }
-
 export default SignInForm;

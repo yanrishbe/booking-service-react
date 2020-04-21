@@ -6,6 +6,7 @@ import Header from '../header/header';
 import RegistrationForm from '../registration-form/registration-form';
 import SignInForm from '../sign-in-form/sign-in-form';
 import AdminPanel from "../admin-panel/admin-panel";
+import MyProfile from "../my-profile/my-profile";
 
 const BOOK_ROOM_URL= 'BOOK_ROOM_URL';
 export default class App extends Component {
@@ -14,7 +15,47 @@ export default class App extends Component {
       showLogIn: false,
       showRooms: true,
       showAdminPanel: false,
+      showMyProfile:false,
+      user: null,
     };
+
+    onLogOutClick = () =>{
+        localStorage.clear();
+        this.setState({
+            showRegistration: false,
+            showLogIn: false,
+            showRooms: true,
+            showAdminPanel: false,
+            showMyProfile:false,
+            user: null,
+        })
+    }
+    onMyProfileClick = async (e) => {
+        const id = localStorage.getItem('userId');
+        const token = localStorage.getItem('userToken');
+        try{
+            const resp = await fetch(`localhost:9999/users/${id}`,{
+                method: 'GET',
+                headers: {
+                    'Authorisation' : token,
+                    'Content-Type' : 'application/json'
+                },
+                mode: 'no-cors'
+            })
+            const body = resp.json();
+            this.setState({
+                showRegistration: false,
+                showLogIn: false,
+                showRooms: true,
+                showAdminPanel: false,
+                showMyProfile: true,
+                user: body.user,
+            });
+        } catch (e) {
+            alert('Sorry something wrong: '+ e);
+        }
+
+    }
 
     onBookClick = (roomId) => {
         const token = localStorage.getItem('token');
@@ -28,7 +69,6 @@ export default class App extends Component {
             body: roomId,
         })
         .then((resp) => resp.json())
-        .then((body) => alert)
         .catch((err) => {
             alert('Error');
         });
@@ -40,6 +80,9 @@ export default class App extends Component {
         return {
           showRegistration: !state.showRegistration,
           showLogIn: false,
+          showRooms: true,
+          showAdminPanel: false,
+          showMyProfile:false,
         }
       });
     };
@@ -49,18 +92,21 @@ export default class App extends Component {
         return {
           showLogIn: !state.showLogIn,
           showRegistration: false,
+          showRooms: true,
+          showAdminPanel: false,
+          showMyProfile:false,
         }
       });
     };
 
     onAdminPanelClick = (event) => {
-      console.log('a');
       this.setState((state) => {
           return {
               showLogIn: false,
               showRegistration: false,
               showRooms: !state.showRooms,
               showAdminPanel:  !state.showAdminPanel,
+              showMyProfile:false,
           }
       })
     };
@@ -69,18 +115,26 @@ export default class App extends Component {
       this.setState({
         showLogIn: true,
         showRegistration: false,
+        showRooms: true,
+        showAdminPanel: false,
+        showMyProfile:false,
       })
     };
 
     render() {
       const rooms = this.state.showRooms ? <Rooms onBookClick = {this.onBookClick}/> : null;
       const adminPanel = this.state.showAdminPanel ? <AdminPanel/> : null;
+      const myProfile = this.state.showMyProfile ? <MyProfile
+          user = {this.state.user}
+          afterAccountDelete = {this.onLogOutClick}/> : null;
       return (
         <React.Fragment>
           <Header
               onSignUpClick = {this.onSignUpClick}
               onSignInClick ={this.onLoginClick}
               onAdminPanelClick = {this.onAdminPanelClick}
+              onMyProfileClick = {this.onMyProfileClick}
+              onLogOutClick = {this.onLogOutClick}
           />
           <RegistrationForm
               isVisible = {this.state.showRegistration}
@@ -91,6 +145,7 @@ export default class App extends Component {
           />
             {adminPanel}
             {rooms}
+            {myProfile}
         </React.Fragment>
       );
     }

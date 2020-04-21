@@ -74,7 +74,7 @@ export default class RegistrationForm extends Component {
     })
   };
 
-  onRegistrationFormSubmit = (event) => {
+  onRegistrationFormSubmit = async (event) => {
     event.preventDefault();
     const name = event.target.name.value;
     const surname = event.target.surname.value;
@@ -84,17 +84,21 @@ export default class RegistrationForm extends Component {
     const password = event.target.password.value;
     
 
-
-    fetch(SEND_REGISTRATION_INFO_URL, {
+    try {
+      const response = await fetch('localhost:9999/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
         },
         mode: "no-cors",
         body: JSON.stringify({name, surname, patronymic,phone,email, password}),
-    })
-    .then((resp) => alert('Thank you for registration'))
-    .catch((err) => alert('Sorry something wrong'));
+      })
+      const body = response.json();
+      localStorage.setItem('userId', body.userId);
+    } catch (e) {
+      alert("Sorry something wrong, Try again later(((")
+    }
+
 
     this.props.afterRegistrationAction();  
   };
