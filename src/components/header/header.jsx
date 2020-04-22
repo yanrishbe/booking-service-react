@@ -16,7 +16,7 @@ export default class Header extends Component {
     render() {
         let adminButton = null;
         let myProfileButton = null;
-        // тута разное значение isAuthoriZed
+// тута разное значение isAuthoriZed
         if (localStorage.getItem('isAuthorised') === 'true' && localStorage.getItem('role') === 'admin') {
             adminButton = (
                 <div className="col-1.5">
@@ -24,7 +24,7 @@ export default class Header extends Component {
                 </div>
             );
         }
-        // и тута isAuthoriSed
+// и тута isAuthoriSed
         if (localStorage.getItem('isAuthorised') === 'true' && localStorage.getItem('role') === 'user') {
             console.log("i'm here")
             myProfileButton = (
@@ -59,7 +59,7 @@ export default class Header extends Component {
                         </div>
                         {adminButton}
                         {myProfileButton}
-                        <UserInfo/>
+                        {this.props.user && this.props.user.id && <UserInfo user={this.props.user}/>}
                     </div>
                 </div>
             </header>

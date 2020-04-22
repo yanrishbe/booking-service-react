@@ -5,7 +5,7 @@ class UserInfo extends Component {
     constructor() {
         super();
         this.state = {
-            isVisible: parseBoolean(localStorage.getItem("isAuthorised"))
+            isVisible: parseBoolean(localStorage.getItem("isAuthorised")),
         }
     }
 
@@ -14,11 +14,8 @@ class UserInfo extends Component {
         if (!this.state.isVisible) {
             return null;
         } else {
-            const email = localStorage.getItem("email");
-            const currency = localStorage.getItem("currency");
-            const amount = localStorage.getItem("amount");
-            const name = localStorage.getItem("name");
-            const surname = localStorage.getItem("surname");
+            const { email, currency, amount, name, surname } = this.props.user;
+
             return (
                 <div className="card" style={{width: 18 + 'rem'}}>
                     <div className="card-header">

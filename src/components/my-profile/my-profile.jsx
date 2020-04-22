@@ -17,7 +17,7 @@ class MyProfile extends Component {
             const response = await fetch(`http://localhost:9999/users/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorisation': token,
+                    'Authorization': token,
                     'Content-Type': 'application/json'
                 },
             });
@@ -40,7 +40,7 @@ class MyProfile extends Component {
         const {user} = this.state;
         // кстати если нет букингов у юзера, то я не высылаю (то есть вся инфа по юзеру кроме букинга)
         // с аккаунтом то же самое
-        const bookings = user.bookings.map((e) => {
+        const bookings = user.bookings ? [] : user.bookings.map((e) => {
             return (
                 <li className="list-group-item">
                     <ul className="list-group">
@@ -56,6 +56,7 @@ class MyProfile extends Component {
                 </li>
             )
         });
+        console.log(user)
         return (
             <div className="card" style={{width: 18 + 'rem'}}>
                 <UpdateMyProfileForm user={user}/>

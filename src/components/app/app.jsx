@@ -19,6 +19,41 @@ export default class App extends Component {
         user: null,
     };
 
+    componentDidMount() {
+        this.fetchUser();
+    }
+
+    async fetchUser() {
+        const id = localStorage.getItem('userId');
+        const token = localStorage.getItem('userToken');
+        console.log("id "+ id);
+        console.log("token ",token)
+
+        if (!id || !token) {
+            return;
+        }
+
+        try {
+            const resp = await fetch(`http://localhost:9999/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            });
+
+            const body = await resp.json();
+            console.log('user data', body);
+
+            this.setState({
+                user: body
+            });
+        } catch (e) {
+            alert('Could not fetch user data ' + e);
+        }
+    }
+
     onLogOutClick = () => {
         localStorage.clear();
         this.setState({
@@ -30,6 +65,7 @@ export default class App extends Component {
             user: null,
         })
     }
+
     onMyProfileClick = async (e) => {
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
@@ -37,7 +73,7 @@ export default class App extends Component {
             const resp = await fetch(`http://localhost:9999/users/${id}`, {
                 method: 'GET',
                 headers: {
-                    'Authorisation': token,
+                    'Authorization': token,
                     'Content-Type': 'application/json'
                 },
                 mode: 'cors'
@@ -49,7 +85,7 @@ export default class App extends Component {
                 showRooms: true,
                 showAdminPanel: false,
                 showMyProfile: true,
-                user: body.user,
+                user: body,
             });
         } catch (e) {
             alert('Sorry something wrong: ' + e);
@@ -135,12 +171,14 @@ export default class App extends Component {
                     onAdminPanelClick={this.onAdminPanelClick}
                     onMyProfileClick={this.onMyProfileClick}
                     onLogOutClick={this.onLogOutClick}
+                    user={this.state.user}
                 />
                 <RegistrationForm
                     isVisible={this.state.showRegistration}
                     afterRegistrationAction={this.afterRegistrationAction}
                 />
                 <SignInForm
+                    onSignInClick={}
                     isVisible={this.state.showLogIn}
                 />
                 {adminPanel}

@@ -21,6 +21,7 @@ class SignInForm extends Component {
                 body: data
             });
             const body = await response.json();
+            console.log(body)
 
             localStorage.clear();
             localStorage.setItem("userToken", body.token);
@@ -28,8 +29,6 @@ class SignInForm extends Component {
             localStorage.setItem("isAuthorised", "true");
             localStorage.setItem("userId", body.userId);
 
-            console.log(localStorage.getItem('role'))
-            console.log(localStorage.getItem('isAuthorised'))
         } catch (e) {
             alert('Sorry something wrong');
         }
