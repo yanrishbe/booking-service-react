@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import UpdateMyProfileForm from "../update-my-profile-form/update-my-profile-form";
+import "./my-profile.css";
 
 class MyProfile extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class MyProfile extends Component {
         const {user} = this.state;
         // кстати если нет букингов у юзера, то я не высылаю (то есть вся инфа по юзеру кроме букинга)
         // с аккаунтом то же самое
-        const bookings = user.bookings ? [] : user.bookings.map((e) => {
+        const bookings = !user.bookings ? [] : user.bookings.map((e) => {
             return (
                 <li className="list-group-item">
                     <ul className="list-group">
@@ -56,9 +57,8 @@ class MyProfile extends Component {
                 </li>
             )
         });
-        console.log(user)
         return (
-            <div className="card" style={{width: 18 + 'rem'}}>
+            <div className="card my-profile__card" style={{width: 18 + 'rem'}}>
                 <UpdateMyProfileForm user={user}/>
                 <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY ACCOUNT</button>
                 <div className="card-header">
@@ -67,10 +67,14 @@ class MyProfile extends Component {
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item">{user.phone}</li>
                     <li className="list-group-item">{user.email}</li>
-                    <li className="list-group-item">Card Credit: {user.account.cardCredit}</li>
-                    <li className="list-group-item">Legal Entity: {user.account.legalEntity}</li>
-                    <li className="list-group-item">Bank: {user.account.bank}</li>
-                    <li className="list-group-item">Amount: {user.account.amount}</li>
+                    {user.account &&
+                        <ul>
+                            <li className="list-group-item">Card Credit: {user.account.cardCredit}</li>
+                            <li className="list-group-item">Legal Entity: {user.account.legalEntity}</li>
+                            <li className="list-group-item">Bank: {user.account.bank}</li>
+                            <li className="list-group-item">Amount: {user.account.amount}</li>
+                        </ul>
+                    }
                     <li className="list-group-item"><h4>BOOKINGS: </h4></li>
                     <li>
                         <ul>{bookings}</ul>

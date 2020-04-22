@@ -28,10 +28,10 @@ export default class App extends Component {
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
         const role = localStorage.getItem("role");
-        this.fetchUser({ id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
+        this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
     }
 
-    async fetchUser({ id, token, isAdmin }) {
+    async fetchUser({id, token, isAdmin}) {
         if (!id || !token) {
             return;
         }
@@ -118,8 +118,8 @@ export default class App extends Component {
             });
     };
 
-    async onSignInClick(id, token, role) {
-        await this.fetchUser({ id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN });
+    onSignInClick = async (id, token, role) => {
+        await this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
     };
 
     onSignUpClick = () => {
@@ -184,6 +184,7 @@ export default class App extends Component {
                     onLogOutClick={this.onLogOutClick}
                     user={this.state.user}
                 />
+                {myProfile}
                 <RegistrationForm
                     isVisible={this.state.showRegistration}
                     afterRegistrationAction={this.afterRegistrationAction}
@@ -194,7 +195,6 @@ export default class App extends Component {
                 />
                 {adminPanel}
                 {rooms}
-                {myProfile}
             </React.Fragment>
         );
     }

@@ -2,12 +2,14 @@
     display: flex;
     background-color: rgb(242,242,242);
     border: 1px solid gray;
+    border-radius: 15px;
     margin: 0.5% 0.5% 0.5% 10%;
     width: 70%;
 }
 .main-photo img{
     max-height: 350px;
     max-width: 350px;
+    border-radius: 15px 0 0 15px;
 }
 .star{
     max-height: 20px;

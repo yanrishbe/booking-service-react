@@ -1,17 +1,19 @@
 import React, {Component} from "react";
 
-class UpdateMyProfileForm extends Component{
+class UpdateMyProfileForm extends Component {
     constructor(props) {
         super(props);
         const {name, surname, patronymic, phone, email} = this.props.user;
-        this.setState({
-            form: {
-                name, surname, patronymic, phone, email
-            },
-        });
+        this.state = {
+            name,
+            surname,
+            patronymic,
+            phone,
+            email
+        };
     }
 
-    onChangeHandler= (e) => {
+    onChangeHandler = (e) => {
         const targetElement = e.target.name;
         const targetValue = e.target.value;
 
@@ -22,18 +24,21 @@ class UpdateMyProfileForm extends Component{
     }
 
     onUpdateClick = async (e) => {
-        try{
+        const data = JSON.stringify(this.state);
+
+        try {
             const id = localStorage.getItem('userId');
             const token = localStorage.getItem('userToken');
-            const response = await fetch(`localhost:9999/users/${id}`, {
+            const response = await fetch(`http://localhost:9999/users/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization' : token,
-                    'Content-Type' : 'application/json'
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
                 },
-                mode: 'no-cors'
+                mode: 'cors',
+                body: data
             });
-            if(response.ok) {
+            if (response.ok) {
                 alert('Updated Successfully');
             }
 
@@ -43,7 +48,7 @@ class UpdateMyProfileForm extends Component{
     }
 
     render() {
-        return(
+        return (
             <div>
                 <label
                     className="input-group-text"

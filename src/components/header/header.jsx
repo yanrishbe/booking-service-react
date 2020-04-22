@@ -59,7 +59,7 @@ export default class Header extends Component {
                         </div>
                         {adminButton}
                         {myProfileButton}
-                        {this.props.user && this.props.user.id && <UserInfo user={this.props.user}/>}
+                        {/*{this.props.user && this.props.user.id && <UserInfo user={this.props.user}/>}*/}
                     </div>
                 </div>
             </header>
