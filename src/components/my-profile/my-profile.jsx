@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import UpdateMyProfileForm from "../update-my-profile-form/update-my-profile-form";
 
-class MyProfile extends Component{
+class MyProfile extends Component {
     constructor(props) {
         super(props);
         this.afterAccountDelete = props.afterAccountDelete;
@@ -11,14 +11,14 @@ class MyProfile extends Component{
     }
 
     onDeleteClick = async () => {
-        try{
+        try {
             const id = localStorage.getItem('userId');
             const token = localStorage.getItem('userToken');
-            const response = await fetch(`localhost:9999/users/${id}`,{
+            const response = await fetch(`http://localhost:9999/users/${id}`, {
                 method: 'DELETE',
-                headers:{
+                headers: {
                     'Authorisation': token,
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 },
             });
             if (response.ok) {
@@ -37,7 +37,9 @@ class MyProfile extends Component{
     }
 
     render() {
-        const {user}= this.state;
+        const {user} = this.state;
+        // кстати если нет букингов у юзера, то я не высылаю (то есть вся инфа по юзеру кроме букинга)
+        // с аккаунтом то же самое
         const bookings = user.bookings.map((e) => {
             return (
                 <li className="list-group-item">
@@ -55,8 +57,8 @@ class MyProfile extends Component{
             )
         });
         return (
-            <div className="card" style="width: 18rem;">
-                <UpdateMyProfileForm user = {user}/>
+            <div className="card" style={{width: 18 + 'rem'}}>
+                <UpdateMyProfileForm user={user}/>
                 <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY ACCOUNT</button>
                 <div className="card-header">
                     {user.name} {user.surname} {user.patronymic}
@@ -68,7 +70,7 @@ class MyProfile extends Component{
                     <li className="list-group-item">Legal Entity: {user.account.legalEntity}</li>
                     <li className="list-group-item">Bank: {user.account.bank}</li>
                     <li className="list-group-item">Amount: {user.account.amount}</li>
-                    <li className="list-group-item"><h4>BOOKINGS:   </h4></li>
+                    <li className="list-group-item"><h4>BOOKINGS: </h4></li>
                     <li>
                         <ul>{bookings}</ul>
                     </li>
