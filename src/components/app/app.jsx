@@ -9,6 +9,11 @@ import AdminPanel from "../admin-panel/admin-panel";
 import MyProfile from "../my-profile/my-profile";
 
 const BOOK_ROOM_URL = 'BOOK_ROOM_URL';
+const ROLES = {
+    ADMIN: 'admin',
+    USER: 'user'
+};
+
 export default class App extends Component {
     state = {
         showRegistration: false,
@@ -20,15 +25,13 @@ export default class App extends Component {
     };
 
     componentDidMount() {
-        this.fetchUser();
-    }
-
-    async fetchUser() {
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
-        console.log("id "+ id);
-        console.log("token ",token)
+        const role = localStorage.getItem("role");
+        this.fetchUser({ id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
+    }
 
+    async fetchUser({ id, token, isAdmin }) {
         if (!id || !token) {
             return;
         }
@@ -44,10 +47,16 @@ export default class App extends Component {
             });
 
             const body = await resp.json();
-            console.log('user data', body);
 
-            this.setState({
-                user: body
+            this.setState((state) => {
+                return {
+                    showRegistration: false,
+                    showLogIn: false,
+                    showRooms: true,
+                    showAdminPanel: isAdmin,
+                    showMyProfile: true,
+                    user: body
+                }
             });
         } catch (e) {
             alert('Could not fetch user data ' + e);
@@ -90,7 +99,6 @@ export default class App extends Component {
         } catch (e) {
             alert('Sorry something wrong: ' + e);
         }
-
     }
 
     onBookClick = (roomId) => {
@@ -110,8 +118,11 @@ export default class App extends Component {
             });
     };
 
-    onSignUpClick = () => {
+    async onSignInClick(id, token, role) {
+        await this.fetchUser({ id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN });
+    };
 
+    onSignUpClick = () => {
         this.setState((state) => {
             return {
                 showRegistration: !state.showRegistration,
@@ -178,7 +189,7 @@ export default class App extends Component {
                     afterRegistrationAction={this.afterRegistrationAction}
                 />
                 <SignInForm
-                    onSignInClick={}
+                    onSignInClick={this.onSignInClick}
                     isVisible={this.state.showLogIn}
                 />
                 {adminPanel}

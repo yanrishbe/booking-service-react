@@ -1,43 +1,38 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class SignInForm extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     onSignInFormSubmit = async (event) => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
-        const data = JSON.stringify({email, password});
+        const data = JSON.stringify({ email, password });
+
         try {
             const response = await fetch('http://localhost:9999/users/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 mode: 'cors',
                 body: data
             });
             const body = await response.json();
-            console.log(body)
 
             localStorage.clear();
             localStorage.setItem("userToken", body.token);
             localStorage.setItem("role", body.role);
             localStorage.setItem("isAuthorised", "true");
             localStorage.setItem("userId", body.userId);
+            this.props.onSignInClick(body.userId, body.token, body.role);
 
         } catch (e) {
             alert('Sorry something wrong');
         }
-
-    }
+    };
 
 
     render() {
-        const {isVisible} = this.props;
+        const { isVisible } = this.props;
 
         if (isVisible) {
             return (
