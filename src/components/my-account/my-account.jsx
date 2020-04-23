@@ -4,15 +4,18 @@ class MyAccount extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            showChangeAccountInfo: false,
-            form:{
-                cardCredit: props.user.account.cardCredit,
-                legalEntity: props.user.account.legalEntity,
-                bank: props.user.account.bank,
-                amount: props.user.account.amount
+        if(props.user.account){
+            this.state = {
+                showChangeAccountInfo: false,
+                form:{
+                    cardCredit: props.user.account.cardCredit,
+                    legalEntity: props.user.account.legalEntity,
+                    bank: props.user.account.bank,
+                    amount: props.user.account.amount
+                }
             }
         }
+
     }
 
     changeHandler = (e) => {
@@ -24,7 +27,7 @@ class MyAccount extends Component {
         try{
             const id = localStorage.getItem('userId');
             const token = localStorage.getItem('token');
-            const resp = await fetch(`localhost:9999/users/${id}/accounts`,{
+            await fetch(`localhost:9999/users/${id}/accounts`,{
                 method: 'POST',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -38,7 +41,7 @@ class MyAccount extends Component {
         }
     }
 
-    changeAccountForm = (currentAccount) => {
+    changeAccountForm = () => {
         return (
             <div>
                 <input type="text" name="card-credit" value={this.state.form.cardCredit} onChange={this.changeHandler}/>
@@ -58,7 +61,10 @@ class MyAccount extends Component {
             return null;
         }
         let changeAccountInfo = null;
-        if(this.state.showChangeAccountInfo){
+        if( !this.state.user.account){
+            return null;
+        }
+        if(this.state.showChangeAccountInfo ){
             changeAccountInfo = this.changeAccountForm(this.state.form)
         }
 
