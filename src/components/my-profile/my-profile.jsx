@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import UpdateMyProfileForm from "../update-my-profile-form/update-my-profile-form";
 import "./my-profile.css";
+import MyAccount from "../my-account/my-account";
 
 class MyProfile extends Component {
     constructor(props) {
         super(props);
         this.afterAccountDelete = props.afterAccountDelete;
         this.state = {
-            user: props.user
+            user: props.user,
+            showMyAccount: false
         };
     }
 
@@ -57,24 +59,27 @@ class MyProfile extends Component {
                 </li>
             )
         });
+
+        const toggleMyAccount = () => {
+            this.setState((state) => {
+                return {
+                    showMyAccount: !state.showMyAccount
+                }
+            })
+        };
+
         return (
             <div className="card my-profile__card" style={{width: 18 + 'rem'}}>
                 <UpdateMyProfileForm user={user}/>
-                <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY ACCOUNT</button>
+                <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY PROFILE</button>
+                <button onClick={toggleMyAccount}>MY ACCOUNT</button>
                 <div className="card-header">
                     {user.name} {user.surname} {user.patronymic}
                 </div>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item">{user.phone}</li>
                     <li className="list-group-item">{user.email}</li>
-                    {user.account &&
-                        <ul>
-                            <li className="list-group-item">Card Credit: {user.account.cardCredit}</li>
-                            <li className="list-group-item">Legal Entity: {user.account.legalEntity}</li>
-                            <li className="list-group-item">Bank: {user.account.bank}</li>
-                            <li className="list-group-item">Amount: {user.account.amount}</li>
-                        </ul>
-                    }
+                        <MyAccount user={user}/>
                     <li className="list-group-item"><h4>BOOKINGS: </h4></li>
                     <li>
                         <ul>{bookings}</ul>
