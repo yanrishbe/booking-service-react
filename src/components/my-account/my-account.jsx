@@ -27,6 +27,7 @@ class MyAccount extends Component {
         try{
             const id = localStorage.getItem('userId');
             const token = localStorage.getItem('token');
+            console.log(this.state.form);
             await fetch(`localhost:9999/users/${id}/accounts`,{
                 method: 'POST',
                 headers:{
