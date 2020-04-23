@@ -24,12 +24,12 @@ export default class App extends Component {
         user: null,
     };
 
-    componentDidMount() {
-        const id = localStorage.getItem('userId');
-        const token = localStorage.getItem('userToken');
-        const role = localStorage.getItem("role");
-        this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
-    }
+    // componentDidMount() {
+    //     const id = localStorage.getItem('userId');
+    //     const token = localStorage.getItem('userToken');
+    //     const role = localStorage.getItem("role");
+    //     this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
+    // }
 
     async fetchUser({id, token, isAdmin}) {
         if (!id || !token) {
