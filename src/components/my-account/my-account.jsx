@@ -44,10 +44,14 @@ class MyAccount extends Component {
     changeAccountForm = () => {
         return (
             <div>
-                <input type="text" name="card-credit" value={this.state.form.cardCredit} onChange={this.changeHandler}/>
-                <input type="text" name="legal-entity" value={this.state.form.legalEntity} onChange={this.changeHandler}/>
-                <input type="text" name="bank" value={this.state.form.bank} onChange={this.changeHandler}/>
-                <input type="text" name="amount" value={this.state.form.amount} onChange={this.changeHandler}/>
+                <label htmlFor="card-credit">Card Credit</label>
+                <input type="text" id="card-credit" name="card-credit" value={this.state.form.cardCredit} onChange={this.changeHandler}/>
+                <label htmlFor="legal-entity">Legal Entity</label>
+                <input type="text" id="legal-entity" name="legal-entity" value={this.state.form.legalEntity} onChange={this.changeHandler}/>
+                <label htmlFor="bank">Bank</label>
+                <input type="text" id="bank" name="bank" value={this.state.form.bank} onChange={this.changeHandler}/>
+                <label htmlFor="amount">Amount</label>
+                <input type="text" id="amount" name="amount" value={this.state.form.amount} onChange={this.changeHandler}/>
                 <button className="btn" onClick={this.onChangeClick}> CHANGE</button>
             </div>
         )
