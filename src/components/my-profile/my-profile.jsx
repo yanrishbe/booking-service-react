@@ -72,7 +72,7 @@ class MyProfile extends Component {
             <div className="card my-profile__card" style={{width: 18 + 'rem'}}>
                 <UpdateMyProfileForm user={user}/>
                 <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY PROFILE</button>
-                <button onClick={toggleMyAccount}>MY ACCOUNT</button>
+                <button className="btn" onClick={toggleMyAccount}>MY ACCOUNT</button>
                 <div className="card-header">
                     {user.name} {user.surname} {user.patronymic}
                 </div>
