@@ -16,7 +16,6 @@ export default class Header extends Component {
     render() {
         let adminButton = null;
         let myProfileButton = null;
-// тута разное значение isAuthoriZed
         if (localStorage.getItem('isAuthorised') === 'true' && localStorage.getItem('role') === 'admin') {
             adminButton = (
                 <div className="col-1.5">
@@ -24,7 +23,6 @@ export default class Header extends Component {
                 </div>
             );
         }
-// и тута isAuthoriSed
         if (localStorage.getItem('isAuthorised') === 'true' && localStorage.getItem('role') === 'user') {
             console.log("i'm here")
             myProfileButton = (
@@ -39,7 +37,7 @@ export default class Header extends Component {
                     <div className="row">
                         <div className="col-6">
                             <h1>
-                                Welcome to Cheeser Hotel
+                                Welcome to Hotel "Minsk"
                             </h1>
                         </div>
                         <div className="col-1.5">

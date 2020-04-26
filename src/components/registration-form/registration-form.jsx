@@ -96,7 +96,7 @@ export default class RegistrationForm extends Component {
             const body = await response.json();
             localStorage.setItem('userId', body.userId);
         } catch (e) {
-            alert("Sorry something wrong, Try again later")
+            alert("Sorry something is wrong, Try again")
         }
 
 
@@ -113,7 +113,7 @@ export default class RegistrationForm extends Component {
                         <form onSubmit={this.onRegistrationFormSubmit}>
 
                             <div className="form-group">
-                                <label htmlFor="name" id="labelForName">Nmae</label>
+                                <label htmlFor="name" id="labelForName">Name</label>
                                 <input
                                     type="text"
                                     className="form-control"
