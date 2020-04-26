@@ -35,7 +35,7 @@ export default class Room extends Component {
     const starsList = [];
     for (let i = 0; i < stars; i += 1) {
       starsList.push(
-        <img src={STAR} alt="star" className="star" />,
+        <img src={STAR} alt="star" key={i} className="star" />,
       );
     }
     return starsList;

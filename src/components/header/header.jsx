@@ -24,7 +24,6 @@ export default class Header extends Component {
             );
         }
         if (localStorage.getItem('isAuthorised') === 'true' && localStorage.getItem('role') === 'user') {
-            console.log("i'm here")
             myProfileButton = (
                 <div className="col-1 5">
                     <button className="btn btn-dark" onClick={this.onMyProfileClick}>MY PROFILE</button>

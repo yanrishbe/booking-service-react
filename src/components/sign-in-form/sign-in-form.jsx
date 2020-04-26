@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class SignInForm extends Component {
     onSignInFormSubmit = async (event) => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
-        const data = JSON.stringify({ email, password });
+        const data = JSON.stringify({email, password});
 
+        let body = {};
         try {
             const response = await fetch('http://localhost:9999/users/login', {
                 method: 'POST',
@@ -16,23 +17,30 @@ class SignInForm extends Component {
                 mode: 'cors',
                 body: data
             });
-            const body = await response.json();
 
-            localStorage.clear();
-            localStorage.setItem("userToken", body.token);
-            localStorage.setItem("role", body.role);
-            localStorage.setItem("isAuthorised", "true");
-            localStorage.setItem("userId", body.userId);
-            this.props.onSignInClick(body.userId, body.token, body.role);
-
+            body = await response.json();
+            if (response.status === 401) {
+                throw new Error('Email and password mismatch');
+            } else if (response.status !== 200) {
+                throw new Error('Sorry something is wrong');
+            }
         } catch (e) {
-            alert('Sorry something wrong');
+            alert(e.message);
+            return;
         }
+
+        localStorage.clear();
+        localStorage.setItem("userToken", body.token);
+        localStorage.setItem("role", body.role);
+        localStorage.setItem("isAuthorised", "true");
+        localStorage.setItem("userId", body.userId);
+        console.log(body)
+        this.props.onSignInClick(body.userId, body.token, body.role);
     };
 
 
     render() {
-        const { isVisible } = this.props;
+        const {isVisible} = this.props;
 
         if (isVisible) {
             return (

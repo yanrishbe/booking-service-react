@@ -7,7 +7,7 @@ const RoomsList = (props) => {
   if(props === null) {
     return null;
   }
-  const roomsModified = roomsList.map((room) => <li><Room room = {room} onBookClick = {props.onBookClick} /></li>);
+  const roomsModified = roomsList.map((room) => <li key={room.id}><Room room = {room} onBookClick = {props.onBookClick} /></li>);
   return (
     <ul>
       {roomsModified}
