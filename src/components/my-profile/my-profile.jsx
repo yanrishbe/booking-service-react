@@ -14,7 +14,30 @@ class MyProfile extends Component {
             showMyBookings: false
         };
     }
+    componentDidMount() {
+        this.fetchUser()
+    }
 
+    fetchUser = async () =>{
+        const id = localStorage.getItem('userId');
+        const token = localStorage.getItem('userToken');
+        try {
+            const resp = await fetch(`http://localhost:9999/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            })
+            const body = await resp.json();
+            this.setState({
+                user: body,
+            });
+        } catch (e) {
+            alert('Sorry something wrong: ' + e);
+        }
+    }
     onMyInfoClick = () => {
         this.setState((s) => {
             return {
@@ -51,24 +74,24 @@ class MyProfile extends Component {
         if(this.state.showMyInfo) {
             content = <MyInfo user={user}/>
         } else if(this.state.showMyAccount) {
-            content = <MyAccount user = {user}/>
+            content = <MyAccount user = {user} />
         }
-        const bookings = !user.bookings ? [] : user.bookings.map((e) => {
-            return (
-                <li className="list-group-item">
-                    <ul className="list-group">
-                        <li className="list-group-item">IsVIP: {e.vip}</li>
-                        <li className="list-group-item">Price: {e.price}</li>
-                        <li className="list-group-item">Stars: {e.stars}</li>
-                        <li className="list-group-item">Persons: {e.persons}</li>
-                        <li className="list-group-item">Empty: {e.empty}</li>
-                        <li className="list-group-item">Expiration: {e.expiration}</li>
-                        <li className="list-group-item">MaxDays: {e.maxDays}</li>
-
-                    </ul>
-                </li>
-            )
-        });
+        // const bookings = !user.bookings ? [] : user.bookings.map((e) => {
+        //     return (
+        //         <li className="list-group-item">
+        //             <ul className="list-group">
+        //                 <li className="list-group-item">IsVIP: {e.vip}</li>
+        //                 <li className="list-group-item">Price: {e.price}</li>
+        //                 <li className="list-group-item">Stars: {e.stars}</li>
+        //                 <li className="list-group-item">Persons: {e.persons}</li>
+        //                 <li className="list-group-item">Empty: {e.empty}</li>
+        //                 <li className="list-group-item">Expiration: {e.expiration}</li>
+        //                 <li className="list-group-item">MaxDays: {e.maxDays}</li>
+        //
+        //             </ul>
+        //         </li>
+        //     )
+        // });
 
         return (
             <div className="container">
