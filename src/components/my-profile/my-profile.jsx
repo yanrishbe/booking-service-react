@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import UpdateMyProfileForm from "../update-my-profile-form/update-my-profile-form";
 import "./my-profile.css";
+import MyInfo from "../my-info/my-info";
 import MyAccount from "../my-account/my-account";
 
 class MyProfile extends Component {
@@ -9,40 +9,50 @@ class MyProfile extends Component {
         this.afterAccountDelete = props.afterAccountDelete;
         this.state = {
             user: props.user,
-            showMyAccount: false
+            showMyInfo:false,
+            showMyAccount: false,
+            showMyBookings: false
         };
     }
 
-    onDeleteClick = async () => {
-        try {
-            const id = localStorage.getItem('userId');
-            const token = localStorage.getItem('userToken');
-            const response = await fetch(`http://localhost:9999/users/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                },
-            });
-            if (response.ok) {
-                alert('You deleted your account');
-            } else {
-                throw Error();
-            }
-        } catch (e) {
-            alert('Sorry something wrong.For your safety, log in again');
-            localStorage.clear();
-        } finally {
-            this.afterAccountDelete();
-        }
+    onMyInfoClick = () => {
+        this.setState((s) => {
+            return {
+            showMyInfo: !s.showMyInfo,
+            showMyAccount: false,
+            showMyBookings: false
+        }});
+    }
 
-        this.afterAccountDelete();
+    onMyAccountClick = () => {
+        this.setState((s) => {
+            return {
+            showMyInfo: false,
+            showMyAccount: !s.showMyAccount,
+            showMyBookings: false
+        }});
+    }
+
+    onMyBookingsClick = () => {
+        this.setState((s) => {
+            return {
+            showMyInfo: false,
+            showMyAccount: false,
+            showMyBookings: !s.showMyBookings
+        }});
     }
 
     render() {
         const {user} = this.state;
         // кстати если нет букингов у юзера, то я не высылаю (то есть вся инфа по юзеру кроме букинга)
         // с аккаунтом то же самое
+        let content;
+
+        if(this.state.showMyInfo) {
+            content = <MyInfo user={user}/>
+        } else if(this.state.showMyAccount) {
+            content = <MyAccount user = {user}/>
+        }
         const bookings = !user.bookings ? [] : user.bookings.map((e) => {
             return (
                 <li className="list-group-item">
@@ -60,32 +70,22 @@ class MyProfile extends Component {
             )
         });
 
-        const toggleMyAccount = () => {
-            this.setState((state) => {
-                return {
-                    showMyAccount: !state.showMyAccount
-                }
-            })
-        };
-
         return (
-            <div className="card my-profile__card" style={{width: 18 + 'rem'}}>
-                <UpdateMyProfileForm user={user}/>
-                <button className="btn btn-lg btn-danger" onClick={this.onDeleteClick}>DELETE MY PROFILE</button>
-                <button className="btn" onClick={toggleMyAccount}>MY ACCOUNT</button>
-                <div className="card-header">
-                    {user.name} {user.surname} {user.patronymic}
+            <div className="container">
+                <div className="row">
+                    <div className="col-2"></div>
+                    <div className="col-6">
+                        <button className="btn btn-lg" onClick={this.onMyInfoClick}>MY INFO</button>
+                        <button className="btn btn-lg" onClick={this.onMyAccountClick}>MY ACCOUNT</button>
+                        <button className="btn btn-lg" onClick={this.onMyBookingsClick}>My BOOKINGS</button>
+                    </div>
+                    <div className="col-2"></div>
                 </div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">{user.phone}</li>
-                    <li className="list-group-item">{user.email}</li>
-                        <MyAccount user={user}/>
-                    <li className="list-group-item"><h4>BOOKINGS: </h4></li>
-                    <li>
-                        <ul>{bookings}</ul>
-                    </li>
-                </ul>
+                <div className="row">
+                    {content}
+                </div>
             </div>
+
         )
     }
 

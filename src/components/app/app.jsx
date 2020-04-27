@@ -9,10 +9,6 @@ import AdminPanel from "../admin-panel/admin-panel";
 import MyProfile from "../my-profile/my-profile";
 
 const BOOK_ROOM_URL = 'BOOK_ROOM_URL';
-const ROLES = {
-    ADMIN: 'admin',
-    USER: 'user'
-};
 
 export default class App extends Component {
     state = {
@@ -24,14 +20,17 @@ export default class App extends Component {
         user: null,
     };
 
-    // componentDidMount() {
-    //     const id = localStorage.getItem('userId');
-    //     const token = localStorage.getItem('userToken');
-    //     const role = localStorage.getItem("role");
-    //     this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
-    // }
+    setStateToDefault = () =>{
+        this.setState({
+            showRegistration: false,
+            showLogIn: false,
+            showRooms: true,
+            showAdminPanel: false,
+            showMyProfile: false,
+        });
+    }
 
-    async fetchUser({id, token, isAdmin}) {
+    async fetchUser({id, token}) {
         if (!id || !token) {
             return;
         }
@@ -48,13 +47,13 @@ export default class App extends Component {
 
             const body = await resp.json();
 
+
             this.setState((state) => {
                 return {
                     showRegistration: false,
                     showLogIn: false,
                     showRooms: true,
-                    showAdminPanel: isAdmin,
-                    showMyProfile: true,
+                    showMyProfile: false,
                     user: body
                 }
             });
@@ -91,7 +90,7 @@ export default class App extends Component {
             this.setState({
                 showRegistration: false,
                 showLogIn: false,
-                showRooms: true,
+                showRooms: false,
                 showAdminPanel: false,
                 showMyProfile: true,
                 user: body,
@@ -118,8 +117,8 @@ export default class App extends Component {
             });
     };
 
-    onSignInClick = async (id, token, role) => {
-        await this.fetchUser({id, token, isAdmin: role.toLowerCase() === ROLES.ADMIN});
+    onSignInClick = async (id, token) => {
+        await this.fetchUser({id, token});
     };
 
     onSignUpClick = () => {
@@ -127,7 +126,7 @@ export default class App extends Component {
             return {
                 showRegistration: !state.showRegistration,
                 showLogIn: false,
-                showRooms: true,
+                showRooms: false,
                 showAdminPanel: false,
                 showMyProfile: false,
             }
@@ -139,7 +138,7 @@ export default class App extends Component {
             return {
                 showLogIn: !state.showLogIn,
                 showRegistration: false,
-                showRooms: true,
+                showRooms: false,
                 showAdminPanel: false,
                 showMyProfile: false,
             }
@@ -182,6 +181,7 @@ export default class App extends Component {
                     onAdminPanelClick={this.onAdminPanelClick}
                     onMyProfileClick={this.onMyProfileClick}
                     onLogOutClick={this.onLogOutClick}
+                    onHeaderClick = {this.setStateToDefault}
                     user={this.state.user}
                 />
                 {myProfile}

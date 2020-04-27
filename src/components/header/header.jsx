@@ -11,6 +11,7 @@ export default class Header extends Component {
         this.onSignInClick = props.onSignInClick;
         this.onAdminPanelClick = props.onAdminPanelClick;
         this.onMyProfileClick = props.onMyProfileClick;
+        this.onHeaderClick = props.onHeaderClick;
     }
 
     render() {
@@ -35,7 +36,7 @@ export default class Header extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-6">
-                            <h1>
+                            <h1 onClick={this.onHeaderClick} onMouseOver={(e) => e.preventDefault()}>
                                 Welcome to Hotel "Minsk"
                             </h1>
                         </div>
