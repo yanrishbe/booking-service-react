@@ -45,8 +45,15 @@ class MyAccount extends Component {
                 },
                 body: JSON.stringify(requestBody)
             });
-            const body = await  resp.json();
-            localStorage.setItem('accountId', body.accountId);
+            if(resp.ok){
+                const body = await resp.json();
+                localStorage.setItem('accountId', body);
+                alert('Account successfully created');
+                window.location.reload();
+            } else {
+                throw Error('Sorry try again later');
+            }
+
         } catch (e) {
             alert(e);
         }

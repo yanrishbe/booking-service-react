@@ -75,7 +75,6 @@ export default class App extends Component {
     }
 
     onMyProfileClick = async (e) => {
-        console.log('onMyProfileClick');
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
         try {
