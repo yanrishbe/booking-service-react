@@ -48,8 +48,9 @@ export default class Room extends Component {
     const starsList = this.createStarsList(stars);
     let bookBtn = null;
     const role = localStorage.getItem('role');
-    const isAuthorized = parseBoolean( localStorage.getItem('isAuthorized'));
+    const isAuthorized = parseBoolean( localStorage.getItem('isAuthorised'));
     if(isFree && role==='user' && isAuthorized){
+
       bookBtn = (
           <button className="btn btn-lg btn-primary" onClick={() => this.props.onBookClick(id)}>
             BOOK
