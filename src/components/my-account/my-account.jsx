@@ -10,14 +10,16 @@ class MyAccount extends Component {
                 creditCard: this.props.user.account.creditCard,
                 legalEntity: this.props.user.account.legalEntity,
                 bank: this.props.user.account.bank,
-                amount: this.props.user.account.amount
+                amount: this.props.user.account.amount,
+                changeSum:''
             }
         } else {
             this.state = {
                 creditCard:true,
                 legalEntity: true,
                 bank:'',
-                amount:'' //CreditCard bool, LegalEntity bool, Bank String, Amount String
+                amount:'',
+                changeSum:''//CreditCard bool, LegalEntity bool, Bank String, Amount String
             }
         }
     }
@@ -59,15 +61,82 @@ class MyAccount extends Component {
         }
     }
 
+    onAmountChangeClick = async (e) => {
+        const id = localStorage.getItem('userId');
+        const accountId = localStorage.getItem('accountId');
+        const token = localStorage.getItem('userToken');
+        let amount = +this.state.changeSum;
+        if(e.target.name === "minus") {
+            amount -= amount*2;
+        }
+        amount = String(amount);
+        const requestBody ={
+            creditCard: this.state.creditCard,
+            legalEntity: this.state.legalEntity,
+            bank: this.state.bank,
+            amount
+        };
+        console.log(requestBody);
+        try {
+            const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`,{
+                method:'PUT',
+                mode: 'cors',
+                headers: {
+                    'Authorization' : token,
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            if(!response.ok) {
+                alert("You wrote a wrong sum");
+            }
+            window.location.reload();
+        } catch (e) {}
+    }
+
     render() {
         const {account} = this.props.user;
+        let changeSum = null;
         if(account){
+            changeSum = (
+                <>
+                    <div className="form-group">
+                        <h5>Change money amount</h5>
+                        <input
+                            type="number"
+                            className="form-control"
+                            min="0"
+                            step="20"
+                            onChange={(e)=> {
+                                this.setState({
+                                    changeSum: e.target.value,
+                                })
+                            }}
+                        />
+                    </div>
+                    <div className="row">
+                        <button
+                            name="minus"
+                            className="btn btn-primary"
+                            onClick={this.onAmountChangeClick}>
+                            REMOVE
+                        </button>
+                        <button
+                            name="plus"
+                            className="btn btn-primary"
+                            onClick={this.onAmountChangeClick}>
+                            ADD
+                        </button>
+                    </div>
+                </>
+            );
             return (
                 <ul className="list-group">
                     <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
                     <li className="list-group-item">Legal Entity: {account.legalEntity ? "true" : "false"}</li>
                     <li className="list-group-item">Bank: {account.bank}</li>
                     <li className="list-group-item">Amount: {account.amount}</li>
+                    {changeSum}
                 </ul>
             )
         } else {

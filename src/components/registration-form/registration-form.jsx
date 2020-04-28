@@ -94,7 +94,7 @@ export default class RegistrationForm extends Component {
                 body: JSON.stringify({name, surname, patronymic, phone, email, password}),
             })
             const body = await response.json();
-            localStorage.setItem('userId', body.userId);
+            //localStorage.setItem('userId', body.userId);
         } catch (e) {
             alert("Sorry something is wrong, Try again")
         }
