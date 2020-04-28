@@ -76,7 +76,6 @@ class MyAccount extends Component {
             bank: this.state.bank,
             amount
         };
-        console.log(requestBody);
         try {
             const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`,{
                 method:'PUT',
@@ -92,6 +91,69 @@ class MyAccount extends Component {
             }
             window.location.reload();
         } catch (e) {}
+    }
+
+    onBooleanValueChangeClick = async (e) => {
+        const name = e.target.name;
+        this.setState((s) => {
+            return {
+                [name] : !s[name]
+            }
+        })
+        const id = localStorage.getItem('userId');
+        const accountId = localStorage.getItem('accountId');
+        const token = localStorage.getItem('userToken');
+        const requestBody ={
+            creditCard: this.state.creditCard,
+            legalEntity: this.state.legalEntity,
+            bank: this.state.bank,
+            amount: "0",
+        };
+        requestBody[name] = !requestBody[name];
+        try{
+            const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`, {
+                method:'PUT',
+                mode: 'cors',
+                headers: {
+                    'Authorization' : token,
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            if(!response.ok) {
+                alert("Sorry try again later");
+            }
+
+        }catch (e) {}
+        window.location.reload();
+    }
+
+    onBankChangeClick = async () => {
+        const id = localStorage.getItem('userId');
+        const accountId = localStorage.getItem('accountId');
+        const token = localStorage.getItem('userToken');
+        const requestBody ={
+            creditCard: this.state.creditCard,
+            legalEntity: this.state.legalEntity,
+            bank: this.state.bank,
+            amount: "0",
+        };
+        try{
+            const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`, {
+                method:'PUT',
+                mode: 'cors',
+                headers: {
+                    'Authorization' : token,
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            if(!response.ok) {
+                alert("Sorry try again later");
+            }
+
+        }catch (e) {}
+        window.location.reload();
     }
 
     render() {
@@ -132,9 +194,28 @@ class MyAccount extends Component {
             );
             return (
                 <ul className="list-group">
-                    <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
-                    <li className="list-group-item">Legal Entity: {account.legalEntity ? "true" : "false"}</li>
-                    <li className="list-group-item">Bank: {account.bank}</li>
+                    <div className="row">
+                        <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
+                        <button name="creditCard" onClick={this.onBooleanValueChangeClick} className="btn ptn-danger">CHANGE</button>
+                    </div>
+                    <div className="row">
+                        <li className="list-group-item">Legal Entity: {account.legalEntity ? "true" : "false"}</li>
+                        <button name="legalEntity" onClick={this.onBooleanValueChangeClick} className="btn ptn-danger">CHANGE</button>
+                    </div>
+                    <li className="list-group-item">
+                        <div className="row">
+                            <label htmlFor="bank-input">Bank:</label>
+                            <input id="bank-input" defaultValue={account.bank} onChange={
+                                (e) => {
+                                    this.setState({
+                                        bank:e.target.value
+                                    })
+                                }
+                            }/>
+                            <button className="btn btn-primary" onClick={this.onBankChangeClick}>CHANGE BANK</button>
+                        </div>
+
+                    </li>
                     <li className="list-group-item">Amount: {account.amount}</li>
                     {changeSum}
                 </ul>
