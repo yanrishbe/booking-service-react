@@ -7,6 +7,7 @@ import RegistrationForm from '../registration-form/registration-form';
 import SignInForm from '../sign-in-form/sign-in-form';
 import AdminPanel from "../admin-panel/admin-panel";
 import MyProfile from "../my-profile/my-profile";
+import {parseBoolean} from "../../utils/parsers";
 
 const BOOK_ROOM_URL = 'BOOK_ROOM_URL';
 
@@ -100,23 +101,6 @@ export default class App extends Component {
         }
     }
 
-    onBookClick = (roomId) => {
-        const token = localStorage.getItem('token');
-        fetch(BOOK_ROOM_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-                'access_token': token,
-            },
-            mode: "cors",
-            body: roomId,
-        })
-            .then((resp) => resp.json())
-            .catch((err) => {
-                alert('Error');
-            });
-    };
-
     onSignInClick = async (id, token) => {
         await this.fetchUser({id, token});
     };
@@ -168,7 +152,7 @@ export default class App extends Component {
     };
 
     render() {
-        const rooms = this.state.showRooms ? <Rooms onBookClick={this.onBookClick}/> : null;
+        const rooms = this.state.showRooms && parseBoolean(localStorage.getItem("isAuthorised")) ? <Rooms/> : null;
         const adminPanel = this.state.showAdminPanel ? <AdminPanel/> : null;
         const myProfile = this.state.showMyProfile ? <MyProfile
             user={this.state.user}

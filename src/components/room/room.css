@@ -23,3 +23,7 @@
     float: right;
     margin-top: 75px;
 }
+
+#root > ul > li > div > div.bookBtn > input {
+    max-width: 60px;
+}

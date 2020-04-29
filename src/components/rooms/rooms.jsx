@@ -35,11 +35,32 @@ export default class Rooms extends Component {
     return true;
   }
 
-  fetchRooms = () => {
-    this.roomsService.getAllRooms()
-      .then((rooms) => {
-        this.#onRoomsLoaded(rooms);
+  fetchRooms = async () => {
+    try {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('userToken');
+      const resp = await fetch(`http://localhost:9999/users/${userId}/bookings`,{
+        method:'GET',
+        mode:'cors',
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization' : token
+        }
       });
+      const body = await resp.json();
+      console.log(body);
+      this.setState({
+        loading: false,
+        roomsList: body,
+      });
+    }catch (e) {
+      console.log('er');
+      console.log(e)
+    }
+    // this.roomsService.getAllRooms()
+    //   .then((rooms) => {
+    //     this.#onRoomsLoaded(rooms);
+    //   });
   };
 
 
@@ -50,6 +71,6 @@ export default class Rooms extends Component {
         <Spinner />
       );
     }
-    return <RoomsList roomsList= {roomsList} onBookClick = {this.props.onBookClick}/>;
+    return <RoomsList roomsList= {roomsList}/>;
   }
 }

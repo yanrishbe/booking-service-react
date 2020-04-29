@@ -8,16 +8,17 @@ export default class Room extends Component {
   constructor(props) {
     super(props);
     const {
-      id, url, isVip, isFree, stars, cost, persons,
+      id, url, isVip, stars, price, persons, empty
     } = this.props.room;
     this.state = {
       id,
       url,
       isVip,
-      isFree,
       stars,
-      cost,
+      price,
       persons,
+      empty,
+      maxDays:''
     };
   }
 
@@ -41,18 +42,49 @@ export default class Room extends Component {
     return starsList;
   };
 
+  onBookCLick = async (e) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      const userId = localStorage.getItem('userId');
+      const id = this.state.id;
+      const requestBody = {
+        id: String(id),
+        maxDays: +this.state.maxDays,
+      }
+      console.log(requestBody);
+
+      const response = await fetch(`http://localhost:9999/users/${userId}/bookings`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization' : token,
+        },
+        body: JSON.stringify(requestBody),
+      })
+      if(!response.ok) {
+        const body = await response.json();
+        console.log(body);
+      } else {
+        const body = await response.json();
+        console.log(body);
+        alert(body);
+      }
+    } catch (e) {}
+    console.log(this.state.maxDays)
+  }
   render() {
     const {
-      id, url, isVip, isFree, stars, cost, persons,
+      url, isVip,stars, price, persons, empty
     } = this.state;
     const starsList = this.createStarsList(stars);
     let bookBtn = null;
     const role = localStorage.getItem('role');
     const isAuthorized = parseBoolean( localStorage.getItem('isAuthorised'));
-    if(isFree && role==='user' && isAuthorized){
+    if(empty ===undefined || empty &&  role==='user' && isAuthorized){
 
       bookBtn = (
-          <button className="btn btn-lg btn-primary" onClick={() => this.props.onBookClick(id)}>
+          <button className="btn btn-lg btn-primary" onClick={this.onBookCLick}>
             BOOK
           </button>
       );
@@ -72,12 +104,16 @@ export default class Room extends Component {
           <br />
           {isVip ? <span className="vip">VIP</span> : null}
           <br />
-          {isFree ? <span className="free">FREE</span> : null}
-          <br />
-          {cost}
+          {price}
           $/day
         </div>
         <div className="bookBtn">
+          <input type="number" max="100" className="form-group" onChange={ (e) => {
+            const val = e.target.value;
+            this.setState({
+              maxDays: val
+            })
+          }}/>
           {bookBtn}
         </div>
       </div>
