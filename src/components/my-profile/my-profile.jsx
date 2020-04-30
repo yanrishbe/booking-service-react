@@ -15,7 +15,7 @@ class MyProfile extends Component {
         };
     }
     componentDidMount() {
-        this.fetchUser()
+        this.fetchUser();
     }
 
     fetchUser = async () =>{
@@ -34,6 +34,7 @@ class MyProfile extends Component {
             this.setState({
                 user: body,
             });
+            console.log(body);
         } catch (e) {
             alert('Sorry something wrong: ' + e);
         }
@@ -70,28 +71,31 @@ class MyProfile extends Component {
         // кстати если нет букингов у юзера, то я не высылаю (то есть вся инфа по юзеру кроме букинга)
         // с аккаунтом то же самое
         let content;
+        const {booking} = user;
+        console.log(booking);
+        const bookingModified = !booking ? null : (
+            <li className="list-group-item">
+                <ul className="list-group">
+                    <li className="list-group-item">IsVIP: {booking.vip ? "true" : "false"}</li>
+                    <li className="list-group-item">Price: {booking.price}</li>
+                    <li className="list-group-item">Stars: {booking.stars}</li>
+                    <li className="list-group-item">Persons: {booking.persons}</li>
+                    <li className="list-group-item">Empty: {booking.empty ? "true" : "false"}</li>
+                    <li className="list-group-item">Expiration: {booking.expiration}</li>
+                    <li className="list-group-item">MaxDays: {booking.maxDays}</li>
+
+                </ul>
+            </li>
+            );
 
         if(this.state.showMyInfo) {
             content = <MyInfo user={user}/>
         } else if(this.state.showMyAccount) {
             content = <MyAccount user = {user} />
+        } else if  (this.state.showMyBookings) {
+            content = bookingModified;
         }
-        // const bookings = !user.bookings ? [] : user.bookings.map((e) => {
-        //     return (
-        //         <li className="list-group-item">
-        //             <ul className="list-group">
-        //                 <li className="list-group-item">IsVIP: {e.vip}</li>
-        //                 <li className="list-group-item">Price: {e.price}</li>
-        //                 <li className="list-group-item">Stars: {e.stars}</li>
-        //                 <li className="list-group-item">Persons: {e.persons}</li>
-        //                 <li className="list-group-item">Empty: {e.empty}</li>
-        //                 <li className="list-group-item">Expiration: {e.expiration}</li>
-        //                 <li className="list-group-item">MaxDays: {e.maxDays}</li>
-        //
-        //             </ul>
-        //         </li>
-        //     )
-        // });
+
 
         return (
             <div className="container">
@@ -100,7 +104,7 @@ class MyProfile extends Component {
                     <div className="col-6">
                         <button className="btn btn-lg" onClick={this.onMyInfoClick}>MY INFO</button>
                         <button className="btn btn-lg" onClick={this.onMyAccountClick}>MY ACCOUNT</button>
-                        <button className="btn btn-lg" onClick={this.onMyBookingsClick}>My BOOKINGS</button>
+                        <button className="btn btn-lg" onClick={this.onMyBookingsClick}>My BOOKING</button>
                     </div>
                     <div className="col-2"></div>
                 </div>

@@ -64,7 +64,7 @@ export default class Room extends Component {
       })
       if(!response.ok) {
         const body = await response.json();
-        console.log(body);
+        alert(body.error);
       } else {
         const body = await response.json();
         console.log(body);
@@ -81,14 +81,23 @@ export default class Room extends Component {
     let bookBtn = null;
     const role = localStorage.getItem('role');
     const isAuthorized = parseBoolean( localStorage.getItem('isAuthorised'));
-    if(empty ===undefined || empty &&  role==='user' && isAuthorized){
+    if((empty ===undefined || empty &&  role==='user') && isAuthorized && localStorage.getItem("accountId")){
 
       bookBtn = (
-          <button className="btn btn-lg btn-primary" onClick={this.onBookCLick}>
-            BOOK
-          </button>
+          <>
+            <input type="number" max="100" min="1" required className="form-group" onChange={ (e) => {
+              const val = e.target.value;
+              this.setState({
+                maxDays: val
+              })
+            }}/>
+            <button className="btn btn-lg btn-primary" onClick={this.onBookCLick}>
+              BOOK
+            </button>
+          </>
       );
     }
+
 
     return (
       <div className="room">
@@ -108,12 +117,6 @@ export default class Room extends Component {
           $/day
         </div>
         <div className="bookBtn">
-          <input type="number" max="100" className="form-group" onChange={ (e) => {
-            const val = e.target.value;
-            this.setState({
-              maxDays: val
-            })
-          }}/>
           {bookBtn}
         </div>
       </div>
