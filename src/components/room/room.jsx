@@ -85,7 +85,7 @@ export default class Room extends Component {
 
       bookBtn = (
           <>
-            <input type="number" max="100" min="1" required className="form-group" onChange={ (e) => {
+            <input type="number" max="100" min="1" defaultValue="1" required className="form-group" onChange={ (e) => {
               const val = e.target.value;
               this.setState({
                 maxDays: val
