@@ -5,6 +5,7 @@ import {parseBoolean} from "../../utils/parsers";
 class MyAccount extends Component {
     constructor(props) {
         super(props);
+        console.log(props)
         if (this.props.user.account) {
             this.state = {
                 creditCard: this.props.user.account.creditCard,
@@ -193,7 +194,7 @@ class MyAccount extends Component {
                 </>
             );
             return (
-                <ul className="list-group">
+                <ul className="list-group container">
                     <div className="row">
                         <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
                         <button name="creditCard" onClick={this.onBooleanValueChangeClick} className="btn ptn-danger">CHANGE</button>

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import './admin-panel.css';
+import MyAccount from "../my-account/my-account";
 
 class AdminPanel extends Component {
 
@@ -7,6 +8,7 @@ class AdminPanel extends Component {
         loading: true,
         users: null,
         roomsList: undefined,
+        adminAccount: null
     };
 
     componentDidMount() {
@@ -24,11 +26,28 @@ class AdminPanel extends Component {
                 this.setState({
                     users : body
                 })
-                console.log(body)
             }).catch((err) => {
                 console.log(err)
             })
-        }catch (e) {}
+            const userId = localStorage.getItem('userId');
+            fetch(`http://localhost:9999/users/${userId}`,{
+                headers:{
+                    'Authorization' : token,
+                    'Content-Type' : 'application/json'
+                },
+                mode:'cors'
+            }).then((resp) => {
+                return resp.json();
+            }).then((body)=> {
+                this.setState({
+                    adminAccount: body
+                })
+            }).catch((err) => {
+                console.log(err)
+            })
+        }catch (e) {
+            console.log(e)
+        }
     }
 
 
@@ -68,9 +87,12 @@ class AdminPanel extends Component {
                 )
             })
             return (
-                <ul className="list-group container">
-                    {usersModified}
-                </ul>
+                <>
+                    <MyAccount user={this.state.adminAccount }/>
+                    <ul className="list-group container">
+                        {usersModified}
+                    </ul>
+                </>
             )
         }
         return null;
