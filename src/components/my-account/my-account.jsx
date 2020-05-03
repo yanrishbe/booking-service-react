@@ -174,6 +174,7 @@ class MyAccount extends Component {
             changeSum = (
                 <>
                     <div className="form-group">
+                        <br/>
                         <h5>Change money amount</h5>
                         <input
                             type="number"
@@ -190,13 +191,13 @@ class MyAccount extends Component {
                     <div className="row">
                         <button
                             name="minus"
-                            className="btn btn-primary"
+                            className="btn btn-primary change-money"
                             onClick={this.onAmountChangeClick}>
                             REMOVE
                         </button>
                         <button
                             name="plus"
-                            className="btn btn-primary"
+                            className="btn btn-primary change-money"
                             onClick={this.onAmountChangeClick}>
                             ADD
                         </button>
@@ -206,32 +207,40 @@ class MyAccount extends Component {
             return (
                 <ul className="list-group container">
                     <div className="row">
-                        <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
-                        <button name="creditCard" onClick={this.onBooleanValueChangeClick}
-                                className="btn ptn-danger">CHANGE
-                        </button>
+                        <li className="list-group-item cred">Credit Card: {account.creditCard ? "Yes" : "No"}
+                            <span>&emsp;</span>
+                            <button name="creditCard" onClick={this.onBooleanValueChangeClick}
+                                    className="btn btn-primary">CHANGE
+                            </button>
+                        </li>
+
                     </div>
                     <div className="row">
-                        <li className="list-group-item">Legal Entity: {account.legalEntity ? "true" : "false"}</li>
-                        <button name="legalEntity" onClick={this.onBooleanValueChangeClick}
-                                className="btn ptn-danger">CHANGE
-                        </button>
+                        <li className="list-group-item cred">Legal Entity: {account.legalEntity ? "Yes" : "No"}
+                            <span>&emsp;</span>
+                            <button name="legalEntity" onClick={this.onBooleanValueChangeClick}
+                                    className="btn btn-primary">CHANGE
+                            </button>
+                        </li>
                     </div>
+                    <br/>
                     <li className="list-group-item">
                         <div className="row">
-                            <label htmlFor="bank-input">Bank:</label>
-                            <input id="bank-input" defaultValue={account.bank} onChange={
+                            <label htmlFor="bank-input" className="bank-input">&emsp;Bank:</label>
+                            <span>&emsp;</span>
+                            <input id="bank-input" className="bank-input" defaultValue={account.bank} onChange={
                                 (e) => {
                                     this.setState({
                                         bank: e.target.value
                                     })
                                 }
                             }/>
-                            <button className="btn btn-primary" onClick={this.onBankChangeClick}>CHANGE BANK</button>
+                            <span>&emsp;</span>
+                            <button className="btn btn-primary bank-input" onClick={this.onBankChangeClick}>CHANGE BANK</button>
                         </div>
 
                     </li>
-                    <li className="list-group-item">Amount: {account.amount}</li>
+                    <li className="list-group-item">Available money amount: {account.amount} BYN</li>
                     {changeSum}
                 </ul>
             )

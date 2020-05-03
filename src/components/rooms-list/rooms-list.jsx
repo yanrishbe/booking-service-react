@@ -7,6 +7,7 @@ const RoomsList = (props) => {
   if(props === null) {
     return null;
   }
+
   const roomsModified = roomsList.map((room) => <li key={room.id}><Room room = {room}/></li>);
   return (
     <ul>

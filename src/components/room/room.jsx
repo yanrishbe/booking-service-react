@@ -51,7 +51,6 @@ export default class Room extends Component {
                 id: String(id),
                 maxDays: +this.state.maxDays,
             }
-            console.log(requestBody);
 
             const response = await fetch(`http://localhost:9999/users/${userId}/bookings`, {
                 method: 'POST',
@@ -116,6 +115,9 @@ export default class Room extends Component {
                     {price}
                     {' '}
                     BYN/day
+                    <br/>
+                    {empty ? <span className="empty">Available</span> : <span className="empty">Busy</span>}
+                    <br/>
                 </div>
                 <div className="bookBtn">
                     {bookBtn}

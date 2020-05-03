@@ -6,3 +6,21 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+#bank-input{
+    height: 30px;
+}
+
+.bank-input{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.change-money{
+    margin-left: 1.5%;
+    margin-bottom: 1.5%;
+}
+.cred{
+    margin-left: 1%;
+    width: 300px;
+}

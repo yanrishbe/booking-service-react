@@ -79,7 +79,6 @@ class MyProfile extends Component {
             const userId = localStorage.getItem("userId");
             const token = localStorage.getItem("userToken");
             const bookingId = this.state.user.booking.id;
-            console.log(bookingId)
             const response = await fetch(`http://localhost:9999/users/${userId}/bookings/${bookingId}`, {
                 method: 'DELETE',
                 mode: 'cors',
@@ -107,7 +106,6 @@ class MyProfile extends Component {
         } else {
             changeValue = this.state.changeBookingDurationValue;
         }
-        console.log(changeValue);
         try {
             const userId = localStorage.getItem('userId');
             const bookingId = this.state.user.booking.id;
@@ -127,10 +125,13 @@ class MyProfile extends Component {
                 alert('successfully changed');
                 window.location.reload();
             } else {
-                await response.json();
+                const resp = await response.json();
+            if (response.status / 200 !== 1) {
+                    throw new Error(resp.error);
+                }
             }
         } catch (e) {
-            alert('Not enough money');
+            alert(e.message);
         }
     }
 
@@ -171,7 +172,7 @@ class MyProfile extends Component {
                         <li className="list-group-item">Persons: {booking.persons}</li>
                         <li className="list-group-item">Date of booking expiration: {booking.expiration}</li>
                         <li className="list-group-item">
-                            MaxDays: {booking.maxDays}
+                            Days: {booking.maxDays}
                             <button className="btn btn-primary" onClick={this.onChangeBookingDurationClick}>Change
                                 booking duration
                             </button>
