@@ -1,3 +1,11 @@
 .my-profile__card {
     margin-left: 15%;
 }
+.booking-input{
+    margin: 1% 1%;
+    height: 40px;
+    max-width: 40px;
+}
+.booking{
+    margin: 0.00001%;
+}

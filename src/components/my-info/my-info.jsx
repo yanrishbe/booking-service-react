@@ -23,6 +23,16 @@ class MyInfo extends Component{
             });
             if (response.ok) {
                 alert('You deleted your account');
+                localStorage.clear();
+                this.setState({
+                    showRegistration: false,
+                    showLogIn: false,
+                    showRooms: true,
+                    showAdminPanel: false,
+                    showMyProfile: false,
+                    user: null,
+                })
+                window.location.reload();
             } else {
                 throw Error();
             }

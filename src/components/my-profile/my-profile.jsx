@@ -144,9 +144,9 @@ class MyProfile extends Component {
             }
         })
         this.changeBookingDuration = !this.state.showChangeBookingDuration ? (
-            <div className="row">
+            <div className="row booking">
                 <button className="btn btn-danger" name="less" onClick={this.onLessMoreButtonClick}>LESS</button>
-                <input type="number" min="0" required defaultValue="0" onChange={(e) => {
+                <input className="booking-input" type="number" min="0" required defaultValue="0" onChange={(e) => {
                     const val = e.target.value;
                     this.setState({
                         changeBookingDurationValue: +val

@@ -69,6 +69,7 @@ export default class App extends Component {
             showMyProfile: false,
             user: null,
         })
+        window.location.reload();
     }
 
     onMyProfileClick = async () => {

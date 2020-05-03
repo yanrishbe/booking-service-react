@@ -49,13 +49,8 @@ export default class Rooms extends Component {
                 roomsList: body,
             });
         } catch (e) {
-            console.log('er');
-            console.log(e)
+            alert('Something is wrong')
         }
-        // this.roomsService.getAllRooms()
-        //   .then((rooms) => {
-        //     this.#onRoomsLoaded(rooms);
-        //   });
     };
 
 
