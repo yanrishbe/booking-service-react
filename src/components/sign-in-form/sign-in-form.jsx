@@ -34,7 +34,6 @@ class SignInForm extends Component {
         localStorage.setItem("role", body.role);
         localStorage.setItem("isAuthorised", "true");
         localStorage.setItem("userId", body.userId);
-        console.log(body)
         this.props.onSignInClick(body.userId, body.token, body.role);
     };
 

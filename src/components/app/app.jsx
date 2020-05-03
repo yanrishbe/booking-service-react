@@ -9,8 +9,6 @@ import AdminPanel from "../admin-panel/admin-panel";
 import MyProfile from "../my-profile/my-profile";
 import {parseBoolean} from "../../utils/parsers";
 
-const BOOK_ROOM_URL = 'BOOK_ROOM_URL';
-
 export default class App extends Component {
     state = {
         showRegistration: false,
@@ -21,7 +19,7 @@ export default class App extends Component {
         user: null,
     };
 
-    setStateToDefault = () =>{
+    setStateToDefault = () => {
         this.setState({
             showRegistration: false,
             showLogIn: false,
@@ -47,9 +45,7 @@ export default class App extends Component {
             });
 
             const body = await resp.json();
-
-
-            this.setState((state) => {
+            this.setState(() => {
                 return {
                     showRegistration: false,
                     showLogIn: false,
@@ -75,7 +71,7 @@ export default class App extends Component {
         })
     }
 
-    onMyProfileClick = async (e) => {
+    onMyProfileClick = async () => {
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
         try {
@@ -129,16 +125,32 @@ export default class App extends Component {
         });
     };
 
-    onAdminPanelClick = (event) => {
-        this.setState((state) => {
-            return {
-                showLogIn: false,
-                showRegistration: false,
-                showRooms: !state.showRooms,
-                showAdminPanel: !state.showAdminPanel,
-                showMyProfile: false,
-            }
-        })
+    onAdminPanelClick = async () => {
+        const id = localStorage.getItem('userId');
+        const token = localStorage.getItem('userToken');
+        try {
+            const resp = await fetch(`http://localhost:9999/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            })
+            const body = await resp.json();
+            this.setState((state) => {
+                return {
+                    showLogIn: false,
+                    showRegistration: false,
+                    showRooms: !state.showRooms,
+                    showAdminPanel: !state.showAdminPanel,
+                    showMyProfile: false,
+                    user: body
+                }
+            });
+        } catch (e) {
+            alert('Sorry something wrong: ' + e);
+        }
     };
 
     afterRegistrationAction = () => {
@@ -153,7 +165,8 @@ export default class App extends Component {
 
     render() {
         const rooms = this.state.showRooms && parseBoolean(localStorage.getItem("isAuthorised")) ? <Rooms/> : null;
-        const adminPanel = this.state.showAdminPanel ? <AdminPanel/> : null;
+        const adminPanel = this.state.showAdminPanel ? <AdminPanel
+            user={this.state.user}/> : null;
         const myProfile = this.state.showMyProfile ? <MyProfile
             user={this.state.user}
             afterAccountDelete={this.onLogOutClick}/> : null;
@@ -165,7 +178,7 @@ export default class App extends Component {
                     onAdminPanelClick={this.onAdminPanelClick}
                     onMyProfileClick={this.onMyProfileClick}
                     onLogOutClick={this.onLogOutClick}
-                    onHeaderClick = {this.setStateToDefault}
+                    onHeaderClick={this.setStateToDefault}
                     user={this.state.user}
                 />
                 {myProfile}

@@ -5,22 +5,24 @@ import {parseBoolean} from "../../utils/parsers";
 class MyAccount extends Component {
     constructor(props) {
         super(props);
-        console.log(props)
         if (this.props.user.account) {
+            if (this.props.user.account.id) {
+                localStorage.setItem('accountId', this.props.user.account.id);
+            }
             this.state = {
                 creditCard: this.props.user.account.creditCard,
                 legalEntity: this.props.user.account.legalEntity,
                 bank: this.props.user.account.bank,
                 amount: this.props.user.account.amount,
-                changeSum:''
+                changeSum: ''
             }
         } else {
             this.state = {
-                creditCard:true,
+                creditCard: true,
                 legalEntity: true,
-                bank:'',
-                amount:'',
-                changeSum:''//CreditCard bool, LegalEntity bool, Bank String, Amount String
+                bank: '',
+                amount: '',
+                changeSum: ''
             }
         }
     }
@@ -32,7 +34,7 @@ class MyAccount extends Component {
         const token = localStorage.getItem('userToken');
         creditCard = parseBoolean(creditCard);
         legalEntity = parseBoolean(legalEntity);
-        const requestBody ={
+        const requestBody = {
             creditCard,
             legalEntity,
             bank,
@@ -41,14 +43,14 @@ class MyAccount extends Component {
         try {
             const resp = await fetch(`http://localhost:9999/users/${id}/accounts`, {
                 method: 'POST',
-                mode:'cors',
+                mode: 'cors',
                 headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 },
                 body: JSON.stringify(requestBody)
             });
-            if(resp.ok){
+            if (resp.ok) {
                 const body = await resp.json();
                 localStorage.setItem('accountId', body);
                 alert('Account successfully created');
@@ -67,65 +69,69 @@ class MyAccount extends Component {
         const accountId = localStorage.getItem('accountId');
         const token = localStorage.getItem('userToken');
         let amount = +this.state.changeSum;
-        if(e.target.name === "minus") {
-            amount -= amount*2;
+        if (e.target.name === "minus") {
+            amount -= amount * 2;
         }
         amount = String(amount);
-        const requestBody ={
+        const requestBody = {
             creditCard: this.state.creditCard,
             legalEntity: this.state.legalEntity,
             bank: this.state.bank,
             amount
         };
         try {
-            const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`,{
-                method:'PUT',
+            const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`, {
+                method: 'PUT',
                 mode: 'cors',
                 headers: {
-                    'Authorization' : token,
-                    'Content-Type' : 'application/json'
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
             })
-            if(!response.ok) {
+            if (!response.ok) {
                 alert("You wrote a wrong sum");
             }
             window.location.reload();
-        } catch (e) {}
+        } catch (e) {
+        }
     }
 
     onBooleanValueChangeClick = async (e) => {
         const name = e.target.name;
         this.setState((s) => {
             return {
-                [name] : !s[name]
+                [name]: !s[name]
             }
         })
         const id = localStorage.getItem('userId');
         const accountId = localStorage.getItem('accountId');
         const token = localStorage.getItem('userToken');
-        const requestBody ={
+        const requestBody = {
             creditCard: this.state.creditCard,
             legalEntity: this.state.legalEntity,
             bank: this.state.bank,
             amount: "0",
         };
         requestBody[name] = !requestBody[name];
-        try{
+        console.log(localStorage.getItem('userId'))
+        try {
             const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`, {
-                method:'PUT',
+                method: 'PUT',
                 mode: 'cors',
                 headers: {
-                    'Authorization' : token,
-                    'Content-Type' : 'application/json'
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
             })
-            if(!response.ok) {
+            console.log(await response.json())
+            if (!response.ok) {
                 alert("Sorry try again later");
             }
 
-        }catch (e) {}
+        } catch (e) {
+        }
         window.location.reload();
     }
 
@@ -133,34 +139,38 @@ class MyAccount extends Component {
         const id = localStorage.getItem('userId');
         const accountId = localStorage.getItem('accountId');
         const token = localStorage.getItem('userToken');
-        const requestBody ={
+        const requestBody = {
             creditCard: this.state.creditCard,
             legalEntity: this.state.legalEntity,
             bank: this.state.bank,
             amount: "0",
         };
-        try{
+        try {
             const response = await fetch(`http://localhost:9999/users/${id}/accounts/${accountId}`, {
-                method:'PUT',
+                method: 'PUT',
                 mode: 'cors',
                 headers: {
-                    'Authorization' : token,
-                    'Content-Type' : 'application/json'
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
             })
-            if(!response.ok) {
+            if (!response.ok) {
                 alert("Sorry try again later");
             }
 
-        }catch (e) {}
+        } catch (e) {
+        }
         window.location.reload();
     }
 
     render() {
-        const {account} = this.props.user;
+        let account;
+        if (this.props.user) {
+            account = this.props.user.account
+        }
         let changeSum = null;
-        if(account){
+        if (account) {
             changeSum = (
                 <>
                     <div className="form-group">
@@ -170,7 +180,7 @@ class MyAccount extends Component {
                             className="form-control"
                             min="0"
                             step="20"
-                            onChange={(e)=> {
+                            onChange={(e) => {
                                 this.setState({
                                     changeSum: e.target.value,
                                 })
@@ -197,11 +207,15 @@ class MyAccount extends Component {
                 <ul className="list-group container">
                     <div className="row">
                         <li className="list-group-item">Credit Card: {account.creditCard ? "true" : "false"}</li>
-                        <button name="creditCard" onClick={this.onBooleanValueChangeClick} className="btn ptn-danger">CHANGE</button>
+                        <button name="creditCard" onClick={this.onBooleanValueChangeClick}
+                                className="btn ptn-danger">CHANGE
+                        </button>
                     </div>
                     <div className="row">
                         <li className="list-group-item">Legal Entity: {account.legalEntity ? "true" : "false"}</li>
-                        <button name="legalEntity" onClick={this.onBooleanValueChangeClick} className="btn ptn-danger">CHANGE</button>
+                        <button name="legalEntity" onClick={this.onBooleanValueChangeClick}
+                                className="btn ptn-danger">CHANGE
+                        </button>
                     </div>
                     <li className="list-group-item">
                         <div className="row">
@@ -209,7 +223,7 @@ class MyAccount extends Component {
                             <input id="bank-input" defaultValue={account.bank} onChange={
                                 (e) => {
                                     this.setState({
-                                        bank:e.target.value
+                                        bank: e.target.value
                                     })
                                 }
                             }/>
@@ -227,8 +241,8 @@ class MyAccount extends Component {
 
                     <div className="form-group">
                         <label htmlFor="credit-card-input">Credit Card</label>
-                        <select id="credit-card-input" className="form-control" onChange={(e)=>{
-                            this.setState({creditCard:e.target.value})
+                        <select id="credit-card-input" className="form-control" onChange={(e) => {
+                            this.setState({creditCard: e.target.value})
                         }}>
                             <option value={true}>True</option>
                             <option value={false}>False</option>
@@ -236,8 +250,8 @@ class MyAccount extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="legal-entity-input">Legal Entity</label>
-                        <select id="legal-entity-input" className="form-control" onChange={(e)=>{
-                            this.setState({legalEntity:e.target.value})
+                        <select id="legal-entity-input" className="form-control" onChange={(e) => {
+                            this.setState({legalEntity: e.target.value})
                         }}>
                             <option value={true}>True</option>
                             <option value={false}>False</option>
@@ -245,8 +259,8 @@ class MyAccount extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="bank-input">Bank</label>
-                        <input type="text" className="form-control" id="bank-input" onChange={(e)=> {
-                            this.setState({bank:e.target.value})
+                        <input type="text" className="form-control" id="bank-input" onChange={(e) => {
+                            this.setState({bank: e.target.value})
                         }}/>
                     </div>
                     <div className="form-group">
@@ -257,9 +271,9 @@ class MyAccount extends Component {
                             min="0"
                             step="25"
                             id="amount-input"
-                            onChange={(e)=> {
-                                this.setState({amount:e.target.value})
-                        }}/>
+                            onChange={(e) => {
+                                this.setState({amount: e.target.value})
+                            }}/>
                     </div>
                     <button className="btn btn-primary" onClick={this.onCreateAccountClick}>CREATE ACCOUNT</button>
                 </div>

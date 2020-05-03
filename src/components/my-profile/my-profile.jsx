@@ -5,12 +5,13 @@ import MyAccount from "../my-account/my-account";
 
 class MyProfile extends Component {
     state = {
-        showMyInfo:false,
+        showMyInfo: false,
         showMyAccount: false,
         showMyBookings: false,
-        showChangeBookingDuration : false,
+        showChangeBookingDuration: false,
         changeBookingDurationValue: 0
     };
+
     constructor(props) {
         super(props);
         this.setState({
@@ -18,11 +19,12 @@ class MyProfile extends Component {
         })
         this.afterAccountDelete = props.afterAccountDelete;
     }
+
     componentDidMount() {
         this.fetchUser();
     }
 
-    fetchUser = async () =>{
+    fetchUser = async () => {
         const id = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
         try {
@@ -38,7 +40,6 @@ class MyProfile extends Component {
             this.setState({
                 user: body,
             });
-            console.log(body);
         } catch (e) {
             alert('Sorry something wrong: ' + e);
         }
@@ -46,51 +47,54 @@ class MyProfile extends Component {
     onMyInfoClick = () => {
         this.setState((s) => {
             return {
-            showMyInfo: !s.showMyInfo,
-            showMyAccount: false,
-            showMyBookings: false
-        }});
+                showMyInfo: !s.showMyInfo,
+                showMyAccount: false,
+                showMyBookings: false
+            }
+        });
     }
 
     onMyAccountClick = () => {
         this.setState((s) => {
             return {
-            showMyInfo: false,
-            showMyAccount: !s.showMyAccount,
-            showMyBookings: false
-        }});
+                showMyInfo: false,
+                showMyAccount: !s.showMyAccount,
+                showMyBookings: false
+            }
+        });
     }
 
     onMyBookingsClick = () => {
         this.setState((s) => {
             return {
-            showMyInfo: false,
-            showMyAccount: false,
-            showMyBookings: !s.showMyBookings
-        }});
+                showMyInfo: false,
+                showMyAccount: false,
+                showMyBookings: !s.showMyBookings
+            }
+        });
     }
 
-    onDeleteBookingClick = async (e) => {
-        try{
+    onDeleteBookingClick = async () => {
+        try {
             const userId = localStorage.getItem("userId");
             const token = localStorage.getItem("userToken");
             const bookingId = this.state.user.booking.id;
             console.log(bookingId)
-            const response = await fetch (`http://localhost:9999/users/${userId}/bookings/${bookingId}`,{
+            const response = await fetch(`http://localhost:9999/users/${userId}/bookings/${bookingId}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
             })
-            if(response.status === 204) {
+            if (response.status === 204) {
                 window.location.reload();
             } else {
                 const body = await response.json();
                 alert(body.message);
             }
-        }catch (e) {
+        } catch (e) {
             alert(e.message);
         }
     }
@@ -98,42 +102,44 @@ class MyProfile extends Component {
     onLessMoreButtonClick = async (e) => {
         const polarity = e.target.name;
         let changeValue = 0;
-        if(polarity === "less") {
+        if (polarity === "less") {
             changeValue = 0 - this.state.changeBookingDurationValue;
         } else {
             changeValue = this.state.changeBookingDurationValue;
         }
         console.log(changeValue);
         try {
-           const userId = localStorage.getItem('userId');
-           const bookingId = this.state.user.booking.id;
-           const token = localStorage.getItem('userToken');
-           const response = await fetch(`http://localhost:9999/users/${userId}/bookings/${bookingId}`, {
-               method: 'PUT',
-               mode: 'cors' ,
-               headers: {
-                   'Content-Type' : 'application/json',
-                   'Authorization' : token
-               },
-               body: JSON.stringify({
-                   maxDays: changeValue
-               })
-           });
-           if(response.status === 202) {
-               alert('successfully changed');
-               window.location.reload();
-           } else {
-               await response.json();
-           }
-        } catch (e) {alert('Not enought money');}
+            const userId = localStorage.getItem('userId');
+            const bookingId = this.state.user.booking.id;
+            const token = localStorage.getItem('userToken');
+            const response = await fetch(`http://localhost:9999/users/${userId}/bookings/${bookingId}`, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    maxDays: changeValue
+                })
+            });
+            if (response.status === 202) {
+                alert('successfully changed');
+                window.location.reload();
+            } else {
+                await response.json();
+            }
+        } catch (e) {
+            alert('Not enough money');
+        }
     }
 
-    changeBookingDuration = null ;
+    changeBookingDuration = null;
 
-    onChangeBookingDurationClick = () =>{
+    onChangeBookingDurationClick = () => {
         this.setState((s) => {
             return {
-                showChangeBookingDuration : !s.showChangeBookingDuration
+                showChangeBookingDuration: !s.showChangeBookingDuration
             }
         })
         this.changeBookingDuration = !this.state.showChangeBookingDuration ? (
@@ -151,24 +157,24 @@ class MyProfile extends Component {
     }
 
 
-
     render() {
         const {user} = this.state;
-        if(user) {
+        if (user) {
             let content;
             const {booking} = user;
             const bookingModified = !booking ? null : (
                 <li className="list-group-item">
                     <ul className="list-group">
-                        <li className="list-group-item">IsVIP: {booking.vip ? "true" : "false"}</li>
+                        <li className="list-group-item">VIP class: {booking.vip ? "Yes" : "No"}</li>
                         <li className="list-group-item">Price: {booking.price}</li>
                         <li className="list-group-item">Stars: {booking.stars}</li>
                         <li className="list-group-item">Persons: {booking.persons}</li>
-                        <li className="list-group-item">Empty: {booking.empty ? "true" : "false"}</li>
-                        <li className="list-group-item">Expiration: {booking.expiration}</li>
+                        <li className="list-group-item">Date of booking expiration: {booking.expiration}</li>
                         <li className="list-group-item">
                             MaxDays: {booking.maxDays}
-                            <button className="btn btn-primary" onClick={this.onChangeBookingDurationClick}>Change booking duration</button>
+                            <button className="btn btn-primary" onClick={this.onChangeBookingDurationClick}>Change
+                                booking duration
+                            </button>
                             {this.changeBookingDuration}
                         </li>
                         <li className="list-group-item">
@@ -180,11 +186,11 @@ class MyProfile extends Component {
                 </li>
             );
 
-            if(this.state.showMyInfo) {
+            if (this.state.showMyInfo) {
                 content = <MyInfo user={user}/>
-            } else if(this.state.showMyAccount) {
-                content = <MyAccount user = {user} />
-            } else if  (this.state.showMyBookings) {
+            } else if (this.state.showMyAccount) {
+                content = <MyAccount user={user}/>
+            } else if (this.state.showMyBookings) {
                 content = bookingModified;
             }
 
@@ -196,7 +202,7 @@ class MyProfile extends Component {
                         <div className="col-6">
                             <button className="btn btn-lg" onClick={this.onMyInfoClick}>MY INFO</button>
                             <button className="btn btn-lg" onClick={this.onMyAccountClick}>MY ACCOUNT</button>
-                            <button className="btn btn-lg" onClick={this.onMyBookingsClick}>My BOOKING</button>
+                            <button className="btn btn-lg" onClick={this.onMyBookingsClick}>MY BOOKING</button>
                         </div>
                         <div className="col-2"></div>
                     </div>
