@@ -1,7 +1,8 @@
 const parseBoolean = (stringBoolean) => {
+    if(typeof stringBoolean === "boolean"){
+        return stringBoolean;
+    }
     switch (stringBoolean) {
-        case 'true':
-            return true;
         case 'false':
             return false;
         default:
